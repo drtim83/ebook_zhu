@@ -1038,6 +1038,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Reposition Netlify Watermark / HUD Badge above the bottom control bar
+  function repositionNetlifyBadge() {
+    const badge = document.getElementById('nl-badge-frame') ||
+                  document.getElementById('nl-hud-frame') ||
+                  document.querySelector('iframe[title*="Netlify"]') ||
+                  document.querySelector('iframe[id*="nl-"]');
+    if (badge) {
+      badge.style.setProperty('bottom', '74px', 'important');
+      badge.style.setProperty('right', '12px', 'important');
+    }
+  }
+  repositionNetlifyBadge();
+  const netlifyObserver = new MutationObserver(repositionNetlifyBadge);
+  netlifyObserver.observe(document.body, { childList: true, subtree: true });
+  setTimeout(repositionNetlifyBadge, 500);
+  setTimeout(repositionNetlifyBadge, 1500);
+  setTimeout(repositionNetlifyBadge, 3000);
+
   // Initialize on Page 2 (Cover)
   goToPage(2);
 });

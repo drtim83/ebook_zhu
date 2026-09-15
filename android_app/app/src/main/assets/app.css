@@ -1309,3 +1309,15 @@ body.theme-dark .speaking-highlight {
   border-color: var(--accent-color);
 }
 
+/* Netlify Watermark / Badge Repositioning - Keep Above Bottom Control Bar */
+#nl-badge-frame,
+#nl-hud-frame,
+iframe[id*="nl-badge"],
+iframe[id*="nl-hud"],
+iframe[title*="Powered by Netlify"],
+iframe[title*="Netlify"] {
+  bottom: calc(var(--footer-height) + 14px) !important;
+  right: 12px !important;
+  transition: bottom 0.2s ease, opacity 0.2s ease !important;
+}
+
