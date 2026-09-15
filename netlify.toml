@@ -22,8 +22,3 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-[[redirects]]
-  from = "/.netlify/scripts/hud*"
-  to = "/empty.js"
-  status = 200
-  force = true
