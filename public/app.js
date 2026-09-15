@@ -1038,23 +1038,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Reposition Netlify Watermark / HUD Badge above the bottom control bar
-  function repositionNetlifyBadge() {
-    const badge = document.getElementById('nl-badge-frame') ||
-                  document.getElementById('nl-hud-frame') ||
-                  document.querySelector('iframe[title*="Netlify"]') ||
-                  document.querySelector('iframe[id*="nl-"]');
-    if (badge) {
-      badge.style.setProperty('bottom', '74px', 'important');
-      badge.style.setProperty('right', '12px', 'important');
-    }
+  // Completely remove Netlify Watermark / HUD Badge from DOM
+  function removeNetlifyBadge() {
+    const badges = document.querySelectorAll('#nl-badge-frame, #nl-hud-frame, iframe[title*="Netlify"], iframe[id*="nl-"], iframe[src*="netlify"]');
+    badges.forEach(b => {
+      b.style.display = 'none';
+      b.remove();
+    });
   }
-  repositionNetlifyBadge();
-  const netlifyObserver = new MutationObserver(repositionNetlifyBadge);
+  removeNetlifyBadge();
+  const netlifyObserver = new MutationObserver(removeNetlifyBadge);
   netlifyObserver.observe(document.body, { childList: true, subtree: true });
-  setTimeout(repositionNetlifyBadge, 500);
-  setTimeout(repositionNetlifyBadge, 1500);
-  setTimeout(repositionNetlifyBadge, 3000);
+  const clearTimer = setInterval(removeNetlifyBadge, 300);
+  setTimeout(() => clearInterval(clearTimer), 10000);
 
   // Initialize on Page 2 (Cover)
   goToPage(2);
