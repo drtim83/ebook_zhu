@@ -49,3 +49,9 @@ wifi-hacker/
 
 # AutoClaw KDream data
 .autoclaw/
+
+# Android build outputs
+android_app/**/build/
+android_app/.gradle/
+android_app/local.properties
+

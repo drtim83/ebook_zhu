@@ -170,9 +170,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const SUPABASE_CDN_PREFIX = "https://rnrvhdhyoqnnljygslgf.supabase.co/storage/v1/object/public/ebook-assets/";
     const pageObj = data.pages[currentPage - 1];
     if (pageObj) {
-      const imgUrl = pageObj.image.startsWith("http") ? pageObj.image : (SUPABASE_CDN_PREFIX + pageObj.image);
-      pageImage.src = imgUrl;
-      bilingualImage.src = imgUrl;
+      const isFile = window.location.protocol === 'file:';
+      const cleanImg = pageObj.image.replace(/^pages\//, '');
+      const localPath = "pages/" + cleanImg;
+      const cdnPath = SUPABASE_CDN_PREFIX + "pages/" + cleanImg;
+
+      const primaryUrl = isFile ? localPath : cdnPath;
+      const fallbackUrl = isFile ? cdnPath : localPath;
+
+      pageImage.onerror = function() {
+        if (this.src !== fallbackUrl && !this.src.endsWith(fallbackUrl)) {
+          this.src = fallbackUrl;
+        }
+      };
+      bilingualImage.onerror = function() {
+        if (this.src !== fallbackUrl && !this.src.endsWith(fallbackUrl)) {
+          this.src = fallbackUrl;
+        }
+      };
+
+      pageImage.src = primaryUrl;
+      bilingualImage.src = primaryUrl;
       bilingualChinese.textContent = pageObj.chineseText || '（本页为图表或无文字）';
       bilingualEnglish.textContent = getRelevantEnglish(currentPage);
       bilingualBadge.textContent = currentPage === 1 ? 'Physical Book' : currentPage === 2 ? 'Book Cover' : `Page ${currentPage} / ${data.totalPages || 96}`;
@@ -510,7 +528,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================
-  // AUDIOBOOK / READ-ALOUD CONTROLLER
+  // TRIPLE-ENGINE AUDIOBOOK CONTROLLER
+  // 1. Android Native TTS (when running in APK)
+  // 2. Web Speech API (with async voice loading)
+  // 3. HTML5 Audio Stream Fallback (100% reliable everywhere)
   // ==========================================
   const audioBookBtn = document.getElementById('audioBookBtn');
   const audiobookWidget = document.getElementById('audiobookWidget');
@@ -531,6 +552,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const synth = ('speechSynthesis' in window) ? window.speechSynthesis : null;
   let activeUtterance = null;
+  let streamAudio = null;
+  let streamChunks = [];
+  let streamChunkIndex = 0;
+  let ttsHeartbeatTimer = null;
   let isAudioPlaying = false;
   let isAudioPaused = false;
   let audioPlaylist = [];
@@ -538,17 +563,76 @@ document.addEventListener('DOMContentLoaded', () => {
   let speechRate = 1.0;
   let speechLang = 'en';
   let autoTurnPage = true;
+  let cachedVoices = [];
   const availableSpeeds = [0.8, 1.0, 1.25, 1.5];
+
+  function refreshVoices() {
+    if (synth) {
+      try {
+        cachedVoices = synth.getVoices() || [];
+      } catch (e) {
+        cachedVoices = [];
+      }
+    }
+  }
+  if (synth) {
+    refreshVoices();
+    if (synth.onvoiceschanged !== undefined) {
+      synth.onvoiceschanged = refreshVoices;
+    }
+  }
 
   function getAvailableVoices(lang) {
     if (!synth) return null;
-    const voices = synth.getVoices();
-    if (!voices || voices.length === 0) return null;
+    if (!cachedVoices || !cachedVoices.length) refreshVoices();
+    if (!cachedVoices || !cachedVoices.length) return null;
     if (lang === 'zh') {
-      return voices.find(v => v.lang.toLowerCase().includes('zh') || v.lang.toLowerCase().includes('cmn')) || null;
+      return cachedVoices.find(v => v.lang.toLowerCase().includes('zh') || v.lang.toLowerCase().includes('cmn')) || null;
     } else {
-      return voices.find(v => v.lang.toLowerCase().includes('en-us') || v.lang.toLowerCase().includes('en-gb')) || voices.find(v => v.lang.toLowerCase().includes('en')) || null;
+      return cachedVoices.find(v => v.lang.toLowerCase().includes('en-us') || v.lang.toLowerCase().includes('en-gb')) || cachedVoices.find(v => v.lang.toLowerCase().includes('en')) || null;
     }
+  }
+
+  function cleanSpeechText(text) {
+    if (!text) return '';
+    return text
+      .replace(/\[照片:[^\]]*\]/g, '')
+      .replace(/\[Photo:[^\]]*\]/g, '')
+      .replace(/[_\-=*#|]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function splitIntoSentences(text, maxLen = 80) {
+    if (!text) return [];
+    const clean = cleanSpeechText(text);
+    if (!clean) return [];
+    const parts = clean.split(/([。！？\n.!?;；]+)/);
+    const results = [];
+    let current = '';
+
+    for (let i = 0; i < parts.length; i++) {
+      const seg = parts[i].trim();
+      if (!seg) continue;
+      if (current.length + seg.length <= maxLen) {
+        current += seg;
+      } else {
+        if (current) results.push(current);
+        if (seg.length <= maxLen) {
+          current = seg;
+        } else {
+          let remaining = seg;
+          while (remaining.length > maxLen) {
+            let slicePoint = maxLen;
+            results.push(remaining.slice(0, slicePoint));
+            remaining = remaining.slice(slicePoint);
+          }
+          current = remaining;
+        }
+      }
+    }
+    if (current) results.push(current);
+    return results.filter(r => r.length > 0);
   }
 
   function buildAudioPlaylist() {
@@ -570,9 +654,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const paras = sec.querySelectorAll('p');
         paras.forEach((p, pIdx) => {
-          if (p.textContent.trim()) {
+          const t = cleanSpeechText(p.textContent);
+          if (t) {
             audioPlaylist.push({
-              text: p.textContent.trim(),
+              text: t,
               element: p,
               title: `${titleElem ? titleElem.textContent.trim() : 'Section'} (Para ${pIdx + 1}/${paras.length})`
             });
@@ -583,7 +668,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (speechLang === 'en') {
         audioLangLabel.textContent = 'English ▾';
         const engText = getRelevantEnglish(currentPage);
-        const paras = engText.split('\n\n').map(t => t.trim()).filter(Boolean);
+        const paras = engText.split('\n\n').map(t => cleanSpeechText(t)).filter(Boolean);
         paras.forEach((p, idx) => {
           audioPlaylist.push({
             text: p,
@@ -595,7 +680,7 @@ document.addEventListener('DOMContentLoaded', () => {
         audioLangLabel.textContent = '中文 ▾';
         const pObj = data.pages[currentPage - 1];
         const zhText = pObj?.chineseText || '';
-        const lines = zhText.split('\n').map(l => l.trim()).filter(l => l.length > 2);
+        const lines = zhText.split('\n').map(l => cleanSpeechText(l)).filter(l => l.length > 2);
         if (lines.length > 0) {
           lines.forEach((l, idx) => {
             audioPlaylist.push({
@@ -619,25 +704,51 @@ document.addEventListener('DOMContentLoaded', () => {
       if (activeSec) {
         const headings = activeSec.querySelectorAll('h2, h3, p');
         headings.forEach(h => {
-          if (h.textContent.trim().length > 3) {
+          const t = cleanSpeechText(h.textContent);
+          if (t && t.length > 3) {
             audioPlaylist.push({
-              text: h.textContent.trim(),
+              text: t,
               element: h,
-              title: `Guide: ${h.textContent.trim().slice(0, 30)}...`
+              title: `Guide: ${t.slice(0, 30)}...`
             });
           }
         });
       }
     } else {
-      speechLang = 'zh';
-      audioLangLabel.textContent = '中文 ▾';
-      const pObj = data.pages[currentPage - 1];
-      const zhText = pObj?.chineseText || `海南省文昌市祝氏族谱 第 ${currentPage} 页`;
-      audioPlaylist.push({
-        text: zhText,
-        element: scanView,
-        title: `第 ${currentPage} 页 (影印版)`
-      });
+      // Scan mode
+      if (speechLang === 'zh') {
+        audioLangLabel.textContent = '中文 ▾';
+        const pObj = data.pages[currentPage - 1];
+        const rawZh = cleanSpeechText(pObj?.chineseText || '');
+        const zhText = rawZh || `海南省文昌市祝氏族谱 第 ${currentPage} 页`;
+        const sentences = splitIntoSentences(zhText, 120);
+        if (sentences.length > 0) {
+          sentences.forEach((s, idx) => {
+            audioPlaylist.push({
+              text: s,
+              element: scanView,
+              title: `第 ${currentPage} 页 影印 (${idx + 1}/${sentences.length})`
+            });
+          });
+        } else {
+          audioPlaylist.push({
+            text: `海南省文昌市祝氏族谱 第 ${currentPage} 页`,
+            element: scanView,
+            title: `第 ${currentPage} 页 (影印版)`
+          });
+        }
+      } else {
+        audioLangLabel.textContent = 'English ▾';
+        const engText = getRelevantEnglish(currentPage);
+        const paras = engText.split('\n\n').map(t => cleanSpeechText(t)).filter(Boolean);
+        paras.forEach((p, idx) => {
+          audioPlaylist.push({
+            text: p,
+            element: scanView,
+            title: `Page ${currentPage} Commentary (${idx + 1}/${paras.length})`
+          });
+        });
+      }
     }
 
     if (audioIndex >= audioPlaylist.length) {
@@ -645,12 +756,85 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function playAudioTrack(index) {
-    if (!synth) {
-      alert('Text-to-Speech audio is not supported in this browser.');
+  function cleanupAudioPlayback() {
+    if (synth) {
+      try { synth.cancel(); } catch (e) {}
+    }
+    clearInterval(ttsHeartbeatTimer);
+    if (streamAudio) {
+      streamAudio.pause();
+      streamAudio.onended = null;
+      streamAudio.onerror = null;
+      streamAudio = null;
+    }
+    if (window.AndroidTTS && typeof window.AndroidTTS.stop === 'function') {
+      try { window.AndroidTTS.stop(); } catch (e) {}
+    }
+  }
+
+  function fallbackToAudioStream(text) {
+    streamChunks = splitIntoSentences(text, 80);
+    if (!streamChunks.length) {
+      playAudioTrack(audioIndex + 1);
+      return;
+    }
+    streamChunkIndex = 0;
+    playStreamChunk();
+  }
+
+  function playStreamChunk() {
+    if (streamChunkIndex >= streamChunks.length) {
+      if (isAudioPlaying && !isAudioPaused) {
+        playAudioTrack(audioIndex + 1);
+      }
       return;
     }
 
+    const chunk = streamChunks[streamChunkIndex];
+    const tl = speechLang === 'zh' ? 'zh-CN' : 'en';
+    const streamUrl = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${tl}&q=${encodeURIComponent(chunk)}`;
+
+    if (streamAudio) {
+      streamAudio.pause();
+      streamAudio = null;
+    }
+
+    streamAudio = new Audio(streamUrl);
+    streamAudio.playbackRate = speechRate;
+    streamAudio.onended = () => {
+      streamChunkIndex++;
+      if (isAudioPlaying && !isAudioPaused) {
+        playStreamChunk();
+      }
+    };
+    streamAudio.onerror = (e) => {
+      console.warn('Audio stream error on chunk:', e);
+      streamChunkIndex++;
+      if (isAudioPlaying && !isAudioPaused) {
+        playStreamChunk();
+      }
+    };
+    streamAudio.play().catch(err => {
+      console.warn('Playback blocked or failed:', err);
+    });
+  }
+
+  // Native Android TTS Callbacks
+  window.onAndroidTTSStart = function() {
+    audioSoundwave.classList.remove('paused');
+  };
+  window.onAndroidTTSDone = function() {
+    if (isAudioPlaying && !isAudioPaused) {
+      playAudioTrack(audioIndex + 1);
+    }
+  };
+  window.onAndroidTTSError = function() {
+    if (isAudioPlaying && !isAudioPaused) {
+      playAudioTrack(audioIndex + 1);
+    }
+  };
+
+  function playAudioTrack(index) {
     if (index < 0) index = 0;
     if (index >= audioPlaylist.length) {
       if (autoTurnPage && (currentMode === 'scan' || currentMode === 'bilingual') && currentPage < data.totalPages) {
@@ -669,10 +853,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     audioIndex = index;
     const track = audioPlaylist[audioIndex];
-    if (!track) return;
+    if (!track || !track.text) {
+      playAudioTrack(audioIndex + 1);
+      return;
+    }
 
-    synth.cancel();
-    clearSpeakingHighlight();
+    cleanupAudioPlayback();
 
     isAudioPlaying = true;
     isAudioPaused = false;
@@ -686,60 +872,98 @@ document.addEventListener('DOMContentLoaded', () => {
     const pct = ((audioIndex + 1) / audioPlaylist.length) * 100;
     audioProgressBarFill.style.width = `${pct}%`;
 
-    if (track.element) {
+    clearSpeakingHighlight();
+    if (track.element && track.element !== scanView) {
       track.element.classList.add('speaking-highlight');
       track.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    activeUtterance = new SpeechSynthesisUtterance(track.text);
-    activeUtterance.rate = speechRate;
-    activeUtterance.lang = speechLang === 'zh' ? 'zh-CN' : 'en-US';
-
-    const v = getAvailableVoices(speechLang);
-    if (v) activeUtterance.voice = v;
-
-    activeUtterance.onend = () => {
-      clearSpeakingHighlight();
-      if (isAudioPlaying && !isAudioPaused) {
-        playAudioTrack(audioIndex + 1);
+    // LAYER 1: Android Native Text-to-Speech (in APK)
+    if (window.AndroidTTS && typeof window.AndroidTTS.speak === 'function') {
+      try {
+        window.AndroidTTS.speak(track.text, speechLang, speechRate);
+        return;
+      } catch (err) {
+        console.warn('Android TTS bridge call failed, falling back:', err);
       }
-    };
+    }
 
-    activeUtterance.onerror = (e) => {
-      console.warn('TTS error:', e);
-      clearSpeakingHighlight();
-      if (isAudioPlaying && !isAudioPaused) {
-        playAudioTrack(audioIndex + 1);
+    // LAYER 2: Web Speech API (speechSynthesis in modern browsers)
+    if (synth) {
+      try {
+        synth.cancel();
+        activeUtterance = new SpeechSynthesisUtterance(track.text);
+        activeUtterance.rate = speechRate;
+        activeUtterance.lang = speechLang === 'zh' ? 'zh-CN' : 'en-US';
+
+        const v = getAvailableVoices(speechLang);
+        if (v) activeUtterance.voice = v;
+
+        activeUtterance.onend = () => {
+          clearInterval(ttsHeartbeatTimer);
+          if (isAudioPlaying && !isAudioPaused) {
+            playAudioTrack(audioIndex + 1);
+          }
+        };
+
+        activeUtterance.onerror = (e) => {
+          clearInterval(ttsHeartbeatTimer);
+          console.warn('SpeechSynthesis error, falling back to stream:', e);
+          fallbackToAudioStream(track.text);
+        };
+
+        // Keep-alive heartbeat for Chrome
+        clearInterval(ttsHeartbeatTimer);
+        ttsHeartbeatTimer = setInterval(() => {
+          if (synth && synth.speaking && !synth.paused) {
+            synth.pause();
+            synth.resume();
+          }
+        }, 12000);
+
+        synth.speak(activeUtterance);
+        return;
+      } catch (e) {
+        console.warn('Web Speech API failed, trying stream fallback:', e);
       }
-    };
+    }
 
-    synth.speak(activeUtterance);
+    // LAYER 3: HTML5 Audio Stream Fallback
+    fallbackToAudioStream(track.text);
   }
 
   function pauseAudio() {
-    if (!synth) return;
-    if (synth.speaking && !synth.paused) {
+    if (window.AndroidTTS && typeof window.AndroidTTS.stop === 'function') {
+      window.AndroidTTS.stop();
+    }
+    if (synth && synth.speaking) {
       synth.pause();
     }
+    if (streamAudio && !streamAudio.paused) {
+      streamAudio.pause();
+    }
+    clearInterval(ttsHeartbeatTimer);
     isAudioPaused = true;
     audioSoundwave.classList.add('paused');
     audioPlayIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
   }
 
   function resumeAudio() {
-    if (!synth) return;
-    if (synth.paused) {
+    isAudioPaused = false;
+    audioSoundwave.classList.remove('paused');
+    audioPlayIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+
+    if (streamAudio && streamAudio.paused) {
+      streamAudio.play().catch(() => playAudioTrack(audioIndex));
+    } else if (synth && synth.paused) {
       synth.resume();
     } else {
       playAudioTrack(audioIndex);
     }
-    isAudioPaused = false;
-    audioSoundwave.classList.remove('paused');
-    audioPlayIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
   }
 
   function stopAudio() {
-    if (synth) synth.cancel();
+    cleanupAudioPlayback();
     isAudioPlaying = false;
     isAudioPaused = false;
     clearSpeakingHighlight();

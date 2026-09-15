@@ -828,6 +828,35 @@ body {
   color: var(--accent-color);
 }
 
+.drawer-download-banner {
+  padding: 8px 16px;
+  background: rgba(184, 51, 42, 0.07);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.apk-download-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent-color);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 2px 6px rgba(184, 51, 42, 0.25);
+}
+
+.apk-download-badge:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
 .drawer-tabs {
   display: flex;
   border-bottom: 1px solid var(--border-color);
