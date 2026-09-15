@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes, viewport-fit=cover">
+  <title>海南省文昌市 祝氏族谱</title>
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body class="theme-light">
+  <!-- Top Black Bar (Status Bar Clearance) -->
+  <div class="top-black-bar"></div>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-bar">
+    <div class="top-left">
+      <button id="tocBtn" class="icon-btn" aria-label="Table of Contents">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+      <div class="header-title-box">
+        <h1 class="header-title">祝氏族谱</h1>
+        <span class="header-sub">海南文昌 · Wenchang Zhu Family</span>
+      </div>
+    </div>
+
+    <div class="top-right">
+      <button id="autoScrollBtn" class="icon-btn" aria-label="Auto Scroll" title="Auto Scroll">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+      </button>
+      <button id="audioBookBtn" class="icon-btn" aria-label="Audiobook" title="Audiobook (Read Aloud)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
+      </button>
+      <button id="searchBtn" class="icon-btn" aria-label="Search" title="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </button>
+      <button id="themeBtn" class="icon-btn" aria-label="Theme" title="Change Theme">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mode Selector Sub-Bar -->
+  <nav class="mode-bar">
+    <div class="mode-tabs">
+      <button class="mode-tab active" data-mode="scan">Scan</button>
+      <button class="mode-tab" data-mode="bilingual">Bilingual</button>
+      <button class="mode-tab" data-mode="english">English</button>
+      <button class="mode-tab" data-mode="guide">Guide & Tree</button>
+    </div>
+  </nav>
+
+  <!-- Main Reader Viewport -->
+  <main class="reader-container" id="readerContainer">
+    <!-- View 1: Scan Mode (High-Res Clean Page) -->
+    <div id="scanView" class="view-panel active">
+      <div class="image-wrapper" id="imageWrapper">
+        <img id="pageImage" src="" alt="Book Page" class="page-img" />
+      </div>
+    </div>
+
+    <!-- View 2: Bilingual Mode (Page Image + English & Chinese OCR) -->
+    <div id="bilingualView" class="view-panel">
+      <div class="bilingual-layout">
+        <div class="bilingual-scan">
+          <img id="bilingualImage" src="" alt="Book Page" class="bilingual-img" />
+        </div>
+        <div class="bilingual-text-box">
+          <div class="section-badge" id="bilingualBadge">Page Info</div>
+          <div class="card-box">
+            <h3 class="card-title">English Commentary & Translation</h3>
+            <div id="bilingualEnglish" class="content-text english-text"></div>
+          </div>
+          <div class="card-box">
+            <h3 class="card-title">Chinese Text / 识别原文</h3>
+            <div id="bilingualChinese" class="content-text chinese-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View 3: English Edition Mode -->
+    <div id="englishView" class="view-panel">
+      <div class="english-layout" id="englishLayout">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+
+    <!-- View 4: Lineage Guide & Family Tree Mode -->
+    <div id="guideView" class="view-panel">
+      <div class="guide-layout">
+        <!-- Sub-navigation Pills -->
+        <div class="guide-nav-pills">
+          <button class="guide-pill active" data-target="guideTimeline">Timeline</button>
+          <button class="guide-pill" data-target="guideTree">Family Tree</button>
+          <button class="guide-pill" data-target="guidePeople">Key People</button>
+          <button class="guide-pill" data-target="guidePoem">Naming Poem</button>
+          <button class="guide-pill" data-target="guideMandate">20-Year Mandate</button>
+        </div>
+
+        <!-- Section A: Timeline -->
+        <section id="guideTimeline" class="guide-section active">
+          <h2 class="guide-sec-title">Historical Timeline of the Lineage</h2>
+          <div class="timeline-container">
+            <div class="timeline-card">
+              <div class="timeline-badge">c. 1046 BC</div>
+              <div class="timeline-content">
+                <h3>Mythological Origins & State of Zhu (祝国)</h3>
+                <p>Descendant of the Yellow Emperor's Minister of Fire (Zhurong 祝融) is enfeoffed by King Wu of Zhou in modern-day Shandong. Nobles adopt "Zhu" (祝) as their permanent surname.</p>
+              </div>
+            </div>
+
+            <div class="timeline-card">
+              <div class="timeline-badge">Han – Song Dynasties</div>
+              <div class="timeline-content">
+                <h3>Taiyuan Commandery (太原郡) Seat</h3>
+                <p>The clan establishes its renowned seat in Taiyuan (Shanxi), producing scholars and magistrates, before migrating southward to Fujian (Putian / Dexing).</p>
+              </div>
+            </div>
+
+            <div class="timeline-card">
+              <div class="timeline-badge">Early Ming (1300s–1400s)</div>
+              <div class="timeline-content">
+                <h3>Ocean Crossing to Hainan</h3>
+                <p><strong>Lord Zhu Dehui (德辉公)</strong> leaves Fujian upon appointment as imperial official in Wanyang (Wanning / 万州), establishing the mother branch in Hainan.</p>
+              </div>
+            </div>
+
+            <div class="timeline-card">
+              <div class="timeline-badge">Mid-Ming (c. 15th Century)</div>
+              <div class="timeline-content">
+                <h3>Founding of Wenchang Branch (Gaolong Village)</h3>
+                <p>5th-generation descendant <strong>Lord Zhu Gao (祝高)</strong> settles in Gaolong Village, Wenchang (高隆村), becoming the 1st Founding Patriarch of the Wenchang lineage.</p>
+              </div>
+            </div>
+
+            <div class="timeline-card">
+              <div class="timeline-badge">1895 (Guangxu 21st Year)</div>
+              <div class="timeline-content">
+                <h3>The Sacred Cross-County Pact</h3>
+                <p>14th-Gen scholar <strong>Zhu Xinchuan (祝心传)</strong> authors the <em>Joint Lineage Preface</em>, mandating that Wanning and Wenchang must exchange genealogy copies whenever updated.</p>
+              </div>
+            </div>
+
+            <div class="timeline-card">
+              <div class="timeline-badge">Late 19th – 20th Century</div>
+              <div class="timeline-content">
+                <h3>Xia Nanyang Diaspora (下南洋)</h3>
+                <p>Clan members emigrate across Southeast Asia to Singapore, Malaysia, and Vietnam, opening trading outposts and establishing thriving overseas families.</p>
+              </div>
+            </div>
+
+            <div class="timeline-card">
+              <div class="timeline-badge">1927 – 1949</div>
+              <div class="timeline-content">
+                <h3>Revolutionary Martyrs</h3>
+                <p>Eight Zhu clan members from Gaolong village sacrifice their lives during the national wars; commemorated in Guangdong provincial annals.</p>
+              </div>
+            </div>
+
+            <div class="timeline-card">
+              <div class="timeline-badge">2003 – 2007</div>
+              <div class="timeline-content">
+                <h3>The Great Lineage Restoration</h3>
+                <p>16th-Gen elder <strong>Zhu Zhaoke (祝朝克)</strong> spends his retirement traveling across 20+ villages, locates the 1895 pact, and compiles the definitive 96-page Lineage Book.</p>
+              </div>
+            </div>
+
+            <div class="timeline-card highlight-card">
+              <div class="timeline-badge highlight-badge">Present Era</div>
+              <div class="timeline-content">
+                <h3>The 20-Year Mandate</h3>
+                <p>The 19th ("Ming" / 明) and 20th ("Yun" / 运) generations carry the generational responsibility for preserving and updating family records.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section B: Family Tree -->
+        <section id="guideTree" class="guide-section">
+          <h2 class="guide-sec-title">Simplified Lineage Tree</h2>
+          <div class="tree-container">
+            <div class="tree-node ancient-node">
+              <div class="node-badge">Mythological Roots</div>
+              <div class="node-title">Yellow Emperor (黄帝) ➔ Zhurong (祝融)</div>
+              <div class="node-desc">State of Zhu (Shandong, 1046 BC) ➔ Taiyuan Commandery (Shanxi)</div>
+            </div>
+            <div class="tree-connector">↓</div>
+
+            <div class="tree-node island-node">
+              <div class="node-badge">Hainan Founding Ancestor</div>
+              <div class="node-title">Lord Zhu Dehui (祝德辉公)</div>
+              <div class="node-desc">Imperial Magistrate in Wanyang (Wanning) from Fujian (Dexing)</div>
+            </div>
+            <div class="tree-connector">↓ [5 Generations]</div>
+
+            <div class="tree-node founder-node">
+              <div class="node-badge">1st Generation (Wenchang Founder)</div>
+              <div class="node-title">Lord Zhu Gao (祝高)</div>
+              <div class="node-desc">Moved to Gaolong Village, Wenchang. m. Lady Yang (万州) & Lady Lin (文昌)</div>
+            </div>
+            <div class="tree-connector">↓</div>
+
+            <div class="tree-node">
+              <div class="node-badge">2nd Generation</div>
+              <div class="node-title">Zhu Long (祝隆)</div>
+            </div>
+            <div class="tree-connector">↓</div>
+
+            <div class="tree-node">
+              <div class="node-badge">3rd Generation</div>
+              <div class="node-title">Zhu Yi (祝裔)</div>
+            </div>
+            <div class="tree-connector">↓</div>
+
+            <div class="tree-split-box">
+              <div class="tree-node split-node">
+                <div class="node-badge">4th Gen Branch A</div>
+                <div class="node-title">Zhu Jing (祝景)</div>
+                <div class="node-desc">Gaolong Senior Branch</div>
+              </div>
+              <div class="tree-node split-node">
+                <div class="node-badge">4th Gen Branch B</div>
+                <div class="node-title">Zhu Ting (祝廷)</div>
+                <div class="node-desc">Wenchang & Wanning Spreading Branch</div>
+              </div>
+            </div>
+            <div class="tree-connector">↓</div>
+
+            <div class="tree-node" style="border-left: 3px solid #b45309; background: #fffbeb;">
+              <div class="node-badge" style="background:#b45309;color:#fff;">Restored Branches #66–#82 (Pages 82–83)</div>
+              <div class="node-title">Descendants of Zhu Ting (廷质子)</div>
+              <div class="node-desc" style="text-align: left; line-height: 1.6; margin-top: 6px;">
+                <strong>• Wenwang Branch (文旺公):</strong><br/>
+                &nbsp;&nbsp;➔ <em>Tianwei (天为):</em> Biqi (必起 ➔ #66有严, #67有瑁, #68有翼), Bishou (必寿 ➔ #69有敏), Biling (必龄 ➔ #70有隆, #71有纪, #72有惠, #73有焕)<br/>
+                &nbsp;&nbsp;➔ <em>Tianhua (天华):</em> Bi'en (必恩 ➔ #74有朋, #75有信, #76有觉, #77有琰, #78有恭, #79有简, 有登)<br/>
+                <strong>• Wenhong Branch (文弘公):</strong><br/>
+                &nbsp;&nbsp;➔ <em>Tianzhong (天忠):</em> Bihui (必慧 ➔ #80有简), Bichuan (必传 ➔ #81有璟, #82有能)
+              </div>
+            </div>
+            <div class="tree-connector">↓</div>
+
+            <div class="tree-node">
+              <div class="node-badge">5th – 8th Generations</div>
+              <div class="node-title">Tian (天) ➔ Bi (必) ➔ Qiu / You / Chuan / Wen ➔ Ji / Zhen</div>
+              <div class="node-desc">Branching across Gaolong, Xinqiao, Penglai, Longlou, Wenjiao, Xitian</div>
+            </div>
+            <div class="tree-connector">↓</div>
+
+            <div class="tree-node pact-node">
+              <div class="node-badge">14th Generation (Xing 兴)</div>
+              <div class="node-title">Zhu Xinchuan (祝心传)</div>
+              <div class="node-desc">Author of 1895 Joint Lineage Pact between Wanning and Wenchang</div>
+            </div>
+            <div class="tree-connector">↓</div>
+
+            <div class="tree-node">
+              <div class="node-badge">15th Generation (Sheng 声)</div>
+              <div class="node-title">Sheng Generation (声字派)</div>
+              <div class="node-desc">Pioneers of the Xia Nanyang migration to Southeast Asia</div>
+            </div>
+            <div class="tree-connector">↓</div>
+
+            <div class="tree-node author-node">
+              <div class="node-badge">16th Generation (Chao 朝)</div>
+              <div class="node-title">Zhu Zhaoke (祝朝克)</div>
+              <div class="node-desc">Compiler and Author of the 2007 Wenchang Zhu Family Lineage</div>
+            </div>
+            <div class="tree-connector">↓</div>
+
+            <div class="tree-node">
+              <div class="node-badge">17th Generation (Jia 家)</div>
+              <div class="node-title">Jia Generation (家字派)</div>
+              <div class="node-desc">Zhu Jiameng / Zhaomeng (Manuscript Reviewer) & Household Heads</div>
+            </div>
+            <div class="tree-connector">↓</div>
+
+            <div class="tree-node father-node">
+              <div class="node-badge">18th Generation (Sheng 圣)</div>
+              <div class="node-title">Sheng Generation (圣字派)</div>
+              <div class="node-desc">Zhu Shengjin (祝圣进 - Paternal line), Shengli (圣利 - Malaysia), etc.</div>
+            </div>
+            <div class="tree-connector">↓</div>
+
+            <div class="tree-node you-node">
+              <div class="node-badge current-badge">★ YOUR GENERATION ★ (19th)</div>
+              <div class="node-title">Ming Generation (明 / 铭字派)</div>
+              <div class="node-desc"><strong>Zhu Mingcan (祝明灿)</strong>, Mingwei (明伟), Mingcheng (明诚), Mingjian (明坚), Mingtai (明泰)</div>
+            </div>
+            <div class="tree-connector">↓</div>
+
+            <div class="tree-node child-node">
+              <div class="node-badge">20th Generation (Children's Gen)</div>
+              <div class="node-title">Yun Generation (运字派)</div>
+              <div class="node-desc">Meaning: Fortune, Destiny, Motion</div>
+            </div>
+            <div class="tree-connector">↓</div>
+
+            <div class="tree-node future-node">
+              <div class="node-badge">21st – 34th Generations</div>
+              <div class="node-title">Ji ➔ Chang ➔ Qi ➔ Ying ➔ Xian ➔ Si ➔ Da...</div>
+              <div class="node-desc">Full sequence codified in the ancestral generational poem</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section C: Key People & Events -->
+        <section id="guidePeople" class="guide-section">
+          <h2 class="guide-sec-title">Key Figures of the Clan</h2>
+          <div class="people-grid">
+            <div class="person-card">
+              <div class="person-header">
+                <h3>Lord Zhu Gao (祝高)</h3>
+                <span class="person-tag">1st Generation</span>
+              </div>
+              <p class="person-desc">Founding Patriarch of Wenchang. Migrated from Wanzhou to Gaolong Village, establishing the family seat that has endured for over 500 years and 21 generations.</p>
+            </div>
+
+            <div class="person-card">
+              <div class="person-header">
+                <h3>Zhu Xinchuan (祝心传)</h3>
+                <span class="person-tag">14th Generation</span>
+              </div>
+              <p class="person-desc">Distinguished scholar who authored the 1895 <em>Joint Lineage Preface</em> (祝氏联谱序), formalizing the cross-county pact uniting Wanning and Wenchang.</p>
+            </div>
+
+            <div class="person-card">
+              <div class="person-header">
+                <h3>Zhu Zhaoke (祝朝克)</h3>
+                <span class="person-tag">16th Generation</span>
+              </div>
+              <p class="person-desc">The author and compiler of the 2007 Lineage. Spent 5 years in retirement traveling to 20+ villages, recovering grave inscriptions and reuniting fragmented branches.</p>
+            </div>
+
+            <div class="person-card">
+              <div class="person-header">
+                <h3>Zhu Shengjin (祝圣进)</h3>
+                <span class="person-tag">18th Generation</span>
+              </div>
+              <p class="person-desc">Key patriarchal elder directly preceding your generation in the Gaolong Village paternal lineage.</p>
+            </div>
+
+            <div class="person-card">
+              <div class="person-header">
+                <h3>Zhu Mingcan (祝明灿)</h3>
+                <span class="person-tag highlight-tag">19th Generation</span>
+              </div>
+              <p class="person-desc">Recorded on pages 44–45 alongside generational brothers (Mingwei, Mingcheng, Mingjian, Mingtai), representing the contemporary generation carrying the family legacy.</p>
+            </div>
+
+            <div class="person-card">
+              <div class="person-header">
+                <h3>Gaolong Village Martyrs</h3>
+                <span class="person-tag">20th Century</span>
+              </div>
+              <p class="person-desc">Eight brave clan members who sacrificed their lives during wartime resistance; permanently enshrined in the Guangdong Revolutionary Martyrs Directory.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section D: Naming Poem -->
+        <section id="guidePoem" class="guide-section">
+          <h2 class="guide-sec-title">Generational Naming Code (字辈 / 派序)</h2>
+          <p class="poem-intro">The generational poem serves as a genealogical naming code. Every male child in a generation receives a given name containing the designated character:</p>
+          
+          <div class="poem-table-wrapper">
+            <table class="poem-table">
+              <thead>
+                <tr>
+                  <th>Gen</th>
+                  <th>Char</th>
+                  <th>Pinyin</th>
+                  <th>Meaning</th>
+                  <th>Clan Significance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1st</td><td>祖 / 高</td><td>Zu / Gao</td><td>Ancestor / High</td><td>Wenchang Founding Patriarch</td></tr>
+                <tr><td>2nd</td><td>隆</td><td>Long</td><td>Prosperous</td><td>Flourishing homestead</td></tr>
+                <tr><td>3rd</td><td>裔</td><td>Yi</td><td>Descendants</td><td>Roots spreading</td></tr>
+                <tr><td>4th</td><td>景 / 廷</td><td>Jing / Ting</td><td>Scenery / Court</td><td>Imperial service & honor</td></tr>
+                <tr><td>5th</td><td>天</td><td>Tian</td><td>Heaven</td><td>Moral providence</td></tr>
+                <tr><td>6th</td><td>必</td><td>Bi</td><td>Certainty</td><td>Integrity & determination</td></tr>
+                <tr><td>7th</td><td>求/有/传/文</td><td>Qiu/You/Chuan/Wen</td><td>Seek/Transmit</td><td>Wisdom & culture</td></tr>
+                <tr><td>8th</td><td>继 / 振</td><td>Ji / Zhen</td><td>Succeed/Invigorate</td><td>Renewed vigor</td></tr>
+                <tr><td>14th</td><td>兴</td><td>Xing</td><td>Prosper / Rise</td><td>Era of Zhu Xinchuan (1895 pact)</td></tr>
+                <tr><td>15th</td><td>声</td><td>Sheng</td><td>Voice / Renown</td><td>Southeast Asia pioneers</td></tr>
+                <tr><td>16th</td><td>朝</td><td>Chao</td><td>Dynasty / Court</td><td>Era of author Zhu Zhaoke</td></tr>
+                <tr><td>17th</td><td>家</td><td>Jia</td><td>Family / Home</td><td>Household unity</td></tr>
+                <tr><td>18th</td><td>圣</td><td>Sheng</td><td>Sage / Virtuous</td><td>Father's generation (Shengjin)</td></tr>
+                <tr class="highlight-row"><td><strong>19th</strong></td><td><strong>明 / 铭</strong></td><td><strong>Ming</strong></td><td><strong>Bright / Inscribed</strong></td><td><strong>YOUR GENERATION (Mingcan 明灿)</strong></td></tr>
+                <tr class="highlight-child-row"><td><strong>20th</strong></td><td><strong>运</strong></td><td><strong>Yun</strong></td><td><strong>Fortune / Destiny</strong></td><td><strong>Your Children's Generation</strong></td></tr>
+                <tr><td>21st</td><td>际</td><td>Ji</td><td>Juncture</td><td>Historic opportunities</td></tr>
+                <tr><td>22nd</td><td>昌</td><td>Chang</td><td>Flourishing</td><td>Abundance & peace</td></tr>
+                <tr><td>23rd</td><td>期</td><td>Qi</td><td>Expectation</td><td>Hopes fulfilled</td></tr>
+                <tr><td>24th</td><td>英</td><td>Ying</td><td>Heroic / Elite</td><td>Talent & achievement</td></tr>
+                <tr><td>25th</td><td>贤</td><td>Xian</td><td>Virtuous</td><td>Moral leadership</td></tr>
+                <tr><td>26th</td><td>斯</td><td>Si</td><td>Classical / Elegant</td><td>Cultural decorum</td></tr>
+                <tr><td>27th</td><td>大</td><td>Da</td><td>Great / Vast</td><td>Magnanimous vision</td></tr>
+                <tr><td>28th</td><td>崇</td><td>Chong</td><td>Sublime</td><td>High ethical standing</td></tr>
+                <tr><td>29th</td><td>盛</td><td>Sheng</td><td>Abundant</td><td>Clan majesty</td></tr>
+                <tr><td>30th</td><td>美</td><td>Mei</td><td>Beautiful</td><td>Harmonious grace</td></tr>
+                <tr><td>31st</td><td>显</td><td>Xian</td><td>Prominent</td><td>Manifest contributions</td></tr>
+                <tr><td>32nd</td><td>荣</td><td>Rong</td><td>Glory</td><td>Honorable legacy</td></tr>
+                <tr><td>33rd</td><td>邦</td><td>Bang</td><td>Nation</td><td>Service to society</td></tr>
+                <tr><td>34th</td><td>国</td><td>Guo</td><td>Country</td><td>Global citizenship</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Section E: The 20-Year Mandate -->
+        <section id="guideMandate" class="guide-section">
+          <div class="mandate-card">
+            <h2>The Sacred Mandate to Your Generation</h2>
+            <blockquote class="mandate-quote">
+              “世世代代，继续努力，隔二、三十年，续修一次。告慰先祖，启蒙后代。”
+              <div class="mandate-trans">“Generation after generation, continue the effort; update this genealogy every 20 or 30 years. To comfort the ancestors, and enlighten the descendants.”</div>
+              <div class="mandate-author">— Zhu Zhaoke (祝朝克), Haikou, November 2007</div>
+            </blockquote>
+            <p class="mandate-note">As 2027 approaches, this mobile application and digital archive fulfill that 20-year cycle, ensuring that descendants across the globe retain their living connection to Gaolong Village and Founding Ancestor Zhu Gao.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Auto-Scroll Floating Pill Widget -->
+  <div id="autoScrollWidget" class="floating-control-widget auto-scroll-pill">
+    <div class="pill-badge">
+      <span class="pulse-indicator"></span>
+      <span class="pill-label">Auto-Scroll</span>
+    </div>
+    <div class="pill-actions">
+      <button id="autoScrollToggleBtn" class="pill-action-btn primary-action" aria-label="Pause/Resume" title="Pause / Resume">
+        <svg id="autoScrollPlayIcon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+      </button>
+      <div class="speed-pill-group">
+        <button class="speed-btn active" data-speed="1">1x</button>
+        <button class="speed-btn" data-speed="2">2x</button>
+        <button class="speed-btn" data-speed="3">3x</button>
+      </div>
+    </div>
+    <button id="closeAutoScrollBtn" class="pill-close-btn" aria-label="Close Auto Scroll" title="Close">&times;</button>
+  </div>
+
+  <!-- Audiobook Player Bottom Panel -->
+  <div id="audiobookWidget" class="floating-control-widget audiobook-panel">
+    <div class="audiobook-header">
+      <div class="audiobook-info">
+        <span class="audio-soundwave" id="audioSoundwave">
+          <span></span><span></span><span></span><span></span>
+        </span>
+        <div class="audiobook-meta">
+          <div id="audiobookTitle" class="audiobook-title">Audiobook Narrator</div>
+          <div id="audiobookProgressText" class="audiobook-sub">Ready to read</div>
+        </div>
+      </div>
+      <div class="audiobook-top-actions">
+        <button id="audioLangToggleBtn" class="lang-toggle-btn" title="Toggle English / Chinese Speech">
+          <span id="audioLangLabel">English ▾</span>
+        </button>
+        <button id="closeAudiobookBtn" class="pill-close-btn" aria-label="Close Audiobook" title="Close">&times;</button>
+      </div>
+    </div>
+
+    <!-- Progress Track -->
+    <div class="audio-progress-bar">
+      <div id="audioProgressBarFill" class="audio-progress-fill" style="width: 0%;"></div>
+    </div>
+
+    <!-- Controls Row -->
+    <div class="audiobook-controls">
+      <button id="audioPrevBtn" class="audio-btn" title="Previous Paragraph">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>
+      </button>
+      <button id="audioPlayPauseBtn" class="audio-btn audio-main-btn" title="Play / Pause">
+        <svg id="audioPlayIcon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+      </button>
+      <button id="audioNextBtn" class="audio-btn" title="Next Paragraph">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
+      </button>
+      <button id="audioStopBtn" class="audio-btn" title="Stop">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"></rect></svg>
+      </button>
+      <button id="audioSpeedBtn" class="audio-pill-btn" title="Change Speed">1.0x</button>
+      <button id="audioAutoTurnBtn" class="audio-pill-btn active" title="Auto Turn Page when Finished">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        <span>Auto-Pg</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Floating Navigation Controls -->
+  <button id="prevBtn" class="nav-float-btn prev-btn" aria-label="Previous Page">&#10094;</button>
+  <button id="nextBtn" class="nav-float-btn next-btn" aria-label="Next Page">&#10095;</button>
+
+  <!-- Bottom Control Bar -->
+  <footer class="bottom-bar">
+    <div class="page-indicator">
+      <span id="currentPageNum">1</span> / <span id="totalPageNum">96</span>
+    </div>
+    <input type="range" id="pageSlider" min="1" max="96" value="1" class="page-slider" />
+    <button id="quickJumpBtn" class="jump-btn">Jump</button>
+  </footer>
+
+  <!-- Table of Contents Drawer -->
+  <div id="tocOverlay" class="modal-overlay">
+    <div class="drawer">
+      <div class="drawer-header">
+        <h2>目录 / Table of Contents</h2>
+        <button id="closeTocBtn" class="icon-btn">&times;</button>
+      </div>
+      <div class="drawer-tabs">
+        <button class="drawer-tab active" data-tab="pages">Pages (1-96)</button>
+        <button class="drawer-tab" data-tab="chapters">English Chapters</button>
+        <button class="drawer-tab" data-tab="guide">Lineage Guide</button>
+      </div>
+      <div id="tocPagesList" class="toc-list active"></div>
+      <div id="tocChaptersList" class="toc-list"></div>
+      <div id="tocGuideList" class="toc-list"></div>
+    </div>
+  </div>
+
+  <!-- Search Modal -->
+  <div id="searchOverlay" class="modal-overlay">
+    <div class="search-modal">
+      <div class="search-input-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="searchInput" placeholder="Search ancestors, names, generations..." autofocus />
+        <button id="closeSearchBtn" class="icon-btn">&times;</button>
+      </div>
+      <div id="searchResults" class="search-results-list">
+        <div class="search-hint">Type to search across Chinese pages, English chapters, and lineage tree.</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="data/book_data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

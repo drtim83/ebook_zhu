@@ -1,0 +1,251 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:2:1-22:12
+INJECTED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:2:1-22:12
+INJECTED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:2:1-22:12
+INJECTED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:2:1-22:12
+MERGED from [androidx.appcompat:appcompat-resources:1.7.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/ca28c56b69b004aaf20b69d0a5767892/transformed/appcompat-resources-1.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.appcompat:appcompat:1.7.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/fa151c8d437a38d7b03b52f212557934/transformed/appcompat-1.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.webkit:webkit:1.12.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/5ab21505bfa8f68ae078187076799609/transformed/webkit-1.12.1/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.fragment:fragment:1.5.4] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/cdac1ee430ca19f18184821e0d1cea7c/transformed/fragment-1.5.4/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.activity:activity:1.7.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/31cbb5381164ea3fc208f1d13d503fb6/transformed/activity-1.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.savedstate:savedstate:1.2.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/5d9ebac22a45dc5fdd5d28c366e15730/transformed/savedstate-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.emoji2:emoji2-views-helper:1.3.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/cf64d4af8366fa230052cf476d026326/transformed/emoji2-views-helper-1.3.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.emoji2:emoji2:1.3.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d18efb8ed4408631a6fd2e37c314a1f3/transformed/emoji2-1.3.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.loader:loader:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/c14ff01c509a11a0c43ccb9dfaada0b9/transformed/loader-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d3505c3fbd1ee7c8f0401e654535511e/transformed/lifecycle-livedata-2.6.2/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d8c9a54444d510ece0303a8fa8078638/transformed/lifecycle-viewmodel-2.6.2/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/84fee817632dde6fa6e1c9215cedd5fb/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/71d21fac4233899820940db129e944c5/transformed/lifecycle-livedata-core-2.6.2/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/4f99a16c5c2968de67d936b568f5a425/transformed/lifecycle-runtime-2.6.2/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/42f2a502b3c3f731679ff1573acc8b6a/transformed/lifecycle-viewmodel-savedstate-2.6.2/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core-ktx:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/93337dbb07347bc2f00027c53e20a42a/transformed/core-ktx-1.13.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/1b89849b17cfe3e1b66f20cc6b1a1b80/transformed/drawerlayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/7869908e3aca0ef3c1129cbea44fd7b7/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f338feffbf6c4d21c5fd0bd35ee24b37/transformed/vectordrawable-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/96ce7b1205d0295280f0228019bc0f2a/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/80950a3e890f91a4095701ce249116b3/transformed/customview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/00c6d559375b92e48ac57847966c5091/transformed/core-1.13.0/AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/1c2da9c5542eb0f37c8052a050d191b2/transformed/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:17:1-55:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/3cb96d42040a45eb49da816c9e1caece/transformed/startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/6c0ed298e9fc1e94b802adc6eb8e9121/transformed/tracing-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/0a922a7549dc88f62b43b1720ef60586/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/56b414531943f76c4a1b09286b044562/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/4cfd5517ba80f2d5e807e37099fee931/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/5a15ae272454be23978de35304a93892/transformed/annotation-experimental-1.4.1/AndroidManifest.xml:2:1-7:12
+	package
+		INJECTED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:2:11-69
+application
+ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:4:5-20:19
+INJECTED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:4:5-20:19
+MERGED from [androidx.emoji2:emoji2:1.3.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d18efb8ed4408631a6fd2e37c314a1f3/transformed/emoji2-1.3.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.3.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d18efb8ed4408631a6fd2e37c314a1f3/transformed/emoji2-1.3.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/84fee817632dde6fa6e1c9215cedd5fb/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/84fee817632dde6fa6e1c9215cedd5fb/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.core:core:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/00c6d559375b92e48ac57847966c5091/transformed/core-1.13.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/00c6d559375b92e48ac57847966c5091/transformed/core-1.13.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/3cb96d42040a45eb49da816c9e1caece/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/3cb96d42040a45eb49da816c9e1caece/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/56b414531943f76c4a1b09286b044562/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/56b414531943f76c4a1b09286b044562/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+	android:extractNativeLibs
+		INJECTED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/00c6d559375b92e48ac57847966c5091/transformed/core-1.13.0/AndroidManifest.xml:28:18-86
+	android:supportsRtl
+		ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:9:9-35
+	android:label
+		ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:7:9-29
+	android:roundIcon
+		ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:8:9-54
+	android:icon
+		ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:6:9-43
+	android:allowBackup
+		ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:5:9-35
+	android:theme
+		ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:10:9-54
+activity#com.zhulineage.reader.MainActivity
+ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:11:9-19:20
+	android:exported
+		ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:13:13-36
+	android:configChanges
+		ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:14:13-74
+	android:name
+		ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:12:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:15:13-18:29
+action#android.intent.action.MAIN
+ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:16:17-69
+	android:name
+		ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:16:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:17:17-77
+	android:name
+		ADDED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml:17:27-74
+uses-sdk
+INJECTED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml
+INJECTED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml
+MERGED from [androidx.appcompat:appcompat-resources:1.7.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/ca28c56b69b004aaf20b69d0a5767892/transformed/appcompat-resources-1.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.7.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/ca28c56b69b004aaf20b69d0a5767892/transformed/appcompat-resources-1.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.appcompat:appcompat:1.7.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/fa151c8d437a38d7b03b52f212557934/transformed/appcompat-1.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.appcompat:appcompat:1.7.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/fa151c8d437a38d7b03b52f212557934/transformed/appcompat-1.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.webkit:webkit:1.12.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/5ab21505bfa8f68ae078187076799609/transformed/webkit-1.12.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.webkit:webkit:1.12.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/5ab21505bfa8f68ae078187076799609/transformed/webkit-1.12.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.fragment:fragment:1.5.4] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/cdac1ee430ca19f18184821e0d1cea7c/transformed/fragment-1.5.4/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.5.4] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/cdac1ee430ca19f18184821e0d1cea7c/transformed/fragment-1.5.4/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.7.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/31cbb5381164ea3fc208f1d13d503fb6/transformed/activity-1.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.7.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/31cbb5381164ea3fc208f1d13d503fb6/transformed/activity-1.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/5d9ebac22a45dc5fdd5d28c366e15730/transformed/savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/5d9ebac22a45dc5fdd5d28c366e15730/transformed/savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.3.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/cf64d4af8366fa230052cf476d026326/transformed/emoji2-views-helper-1.3.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.3.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/cf64d4af8366fa230052cf476d026326/transformed/emoji2-views-helper-1.3.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2:1.3.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d18efb8ed4408631a6fd2e37c314a1f3/transformed/emoji2-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.3.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d18efb8ed4408631a6fd2e37c314a1f3/transformed/emoji2-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.loader:loader:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/c14ff01c509a11a0c43ccb9dfaada0b9/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/c14ff01c509a11a0c43ccb9dfaada0b9/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d3505c3fbd1ee7c8f0401e654535511e/transformed/lifecycle-livedata-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d3505c3fbd1ee7c8f0401e654535511e/transformed/lifecycle-livedata-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d8c9a54444d510ece0303a8fa8078638/transformed/lifecycle-viewmodel-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d8c9a54444d510ece0303a8fa8078638/transformed/lifecycle-viewmodel-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/84fee817632dde6fa6e1c9215cedd5fb/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/84fee817632dde6fa6e1c9215cedd5fb/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/71d21fac4233899820940db129e944c5/transformed/lifecycle-livedata-core-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/71d21fac4233899820940db129e944c5/transformed/lifecycle-livedata-core-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/4f99a16c5c2968de67d936b568f5a425/transformed/lifecycle-runtime-2.6.2/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/4f99a16c5c2968de67d936b568f5a425/transformed/lifecycle-runtime-2.6.2/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/42f2a502b3c3f731679ff1573acc8b6a/transformed/lifecycle-viewmodel-savedstate-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/42f2a502b3c3f731679ff1573acc8b6a/transformed/lifecycle-viewmodel-savedstate-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core-ktx:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/93337dbb07347bc2f00027c53e20a42a/transformed/core-ktx-1.13.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/93337dbb07347bc2f00027c53e20a42a/transformed/core-ktx-1.13.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/1b89849b17cfe3e1b66f20cc6b1a1b80/transformed/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/1b89849b17cfe3e1b66f20cc6b1a1b80/transformed/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/7869908e3aca0ef3c1129cbea44fd7b7/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/7869908e3aca0ef3c1129cbea44fd7b7/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f338feffbf6c4d21c5fd0bd35ee24b37/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f338feffbf6c4d21c5fd0bd35ee24b37/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/96ce7b1205d0295280f0228019bc0f2a/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/96ce7b1205d0295280f0228019bc0f2a/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/80950a3e890f91a4095701ce249116b3/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/80950a3e890f91a4095701ce249116b3/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/00c6d559375b92e48ac57847966c5091/transformed/core-1.13.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/00c6d559375b92e48ac57847966c5091/transformed/core-1.13.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/1c2da9c5542eb0f37c8052a050d191b2/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/1c2da9c5542eb0f37c8052a050d191b2/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/3cb96d42040a45eb49da816c9e1caece/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/3cb96d42040a45eb49da816c9e1caece/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/6c0ed298e9fc1e94b802adc6eb8e9121/transformed/tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/6c0ed298e9fc1e94b802adc6eb8e9121/transformed/tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/0a922a7549dc88f62b43b1720ef60586/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/0a922a7549dc88f62b43b1720ef60586/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/56b414531943f76c4a1b09286b044562/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/56b414531943f76c4a1b09286b044562/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/4cfd5517ba80f2d5e807e37099fee931/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/4cfd5517ba80f2d5e807e37099fee931/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/5a15ae272454be23978de35304a93892/transformed/annotation-experimental-1.4.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/5a15ae272454be23978de35304a93892/transformed/annotation-experimental-1.4.1/AndroidManifest.xml:5:5-44
+	android:targetSdkVersion
+		INJECTED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/AndroidManifest.xml
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.3.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d18efb8ed4408631a6fd2e37c314a1f3/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/84fee817632dde6fa6e1c9215cedd5fb/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/84fee817632dde6fa6e1c9215cedd5fb/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/3cb96d42040a45eb49da816c9e1caece/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/3cb96d42040a45eb49da816c9e1caece/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d18efb8ed4408631a6fd2e37c314a1f3/transformed/emoji2-1.3.0/AndroidManifest.xml:28:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d18efb8ed4408631a6fd2e37c314a1f3/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d18efb8ed4408631a6fd2e37c314a1f3/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d18efb8ed4408631a6fd2e37c314a1f3/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.3.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d18efb8ed4408631a6fd2e37c314a1f3/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d18efb8ed4408631a6fd2e37c314a1f3/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/d18efb8ed4408631a6fd2e37c314a1f3/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/84fee817632dde6fa6e1c9215cedd5fb/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/84fee817632dde6fa6e1c9215cedd5fb/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/84fee817632dde6fa6e1c9215cedd5fb/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:30:17-78
+permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/00c6d559375b92e48ac57847966c5091/transformed/core-1.13.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/00c6d559375b92e48ac57847966c5091/transformed/core-1.13.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/00c6d559375b92e48ac57847966c5091/transformed/core-1.13.0/AndroidManifest.xml:23:9-81
+permission#com.zhulineage.reader.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/00c6d559375b92e48ac57847966c5091/transformed/core-1.13.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/00c6d559375b92e48ac57847966c5091/transformed/core-1.13.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/00c6d559375b92e48ac57847966c5091/transformed/core-1.13.0/AndroidManifest.xml:23:9-81
+uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/00c6d559375b92e48ac57847966c5091/transformed/core-1.13.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/00c6d559375b92e48ac57847966c5091/transformed/core-1.13.0/AndroidManifest.xml:26:22-94
+uses-permission#com.zhulineage.reader.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/00c6d559375b92e48ac57847966c5091/transformed/core-1.13.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.13.0] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/00c6d559375b92e48ac57847966c5091/transformed/core-1.13.0/AndroidManifest.xml:26:22-94
+meta-data#androidx.profileinstaller.ProfileInstallerInitializer
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+receiver#androidx.profileinstaller.ProfileInstallReceiver
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+	android:enabled
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+	android:exported
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+	android:permission
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+	android:directBootAware
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+action#androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+intent-filter#action:name:androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+action#androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+intent-filter#action:name:androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+action#androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+intent-filter#action:name:androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+action#androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/drtimothytok/.gradle/caches/9.4.1/transforms/f1ad6fea1e60e672870c7ca82d3d73e0/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:25-92

@@ -1,0 +1,8 @@
+com.zhulineage.reader.app-pngs-0 /Users/drtimothytok/VibeCoding/Ebook/android_app/app/build/generated/res/pngs/debug
+com.zhulineage.reader.app-updated_navigation_xml-1 /Users/drtimothytok/VibeCoding/Ebook/android_app/app/build/generated/updated_navigation_xml/debug
+com.zhulineage.reader.app-packageDebugResources-2 /Users/drtimothytok/VibeCoding/Ebook/android_app/app/build/intermediates/incremental/debug/packageDebugResources/merged.dir
+com.zhulineage.reader.app-packageDebugResources-3 /Users/drtimothytok/VibeCoding/Ebook/android_app/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir
+com.zhulineage.reader.app-debug-4 /Users/drtimothytok/VibeCoding/Ebook/android_app/app/build/intermediates/merged_res/debug/mergeDebugResources
+com.zhulineage.reader.app-debug-5 /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/debug/res
+com.zhulineage.reader.app-main-6 /Users/drtimothytok/VibeCoding/Ebook/android_app/app/src/main/res
+gradleHome-0 /Users/drtimothytok/.gradle

@@ -1,0 +1,23 @@
+# Netlify Configuration for EbookMania
+# Team ID: 6a3635ec0e7ad839a8d809e8
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NEXT_PUBLIC_SUPABASE_URL = "https://rnrvhdhyoqnnljygslgf.supabase.co"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/pdf.worker.min.mjs"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
