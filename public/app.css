@@ -663,6 +663,81 @@ body {
   margin: 0;
 }
 
+.poem-grand-banner {
+  background: linear-gradient(145deg, rgba(180, 83, 9, 0.07), rgba(217, 119, 6, 0.02));
+  border: 2px solid var(--gold-color);
+  border-radius: 12px;
+  padding: 20px 16px;
+  margin-bottom: 20px;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(180, 83, 9, 0.08);
+}
+
+.poem-grand-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--accent-color);
+  margin-bottom: 4px;
+}
+
+.poem-grand-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.grand-poem-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.grand-poem-row {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.grand-poem-couplet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  padding: 8px 14px;
+  border-radius: 8px;
+  min-width: 220px;
+}
+
+.grand-poem-couplet.highlight-couplet {
+  border: 1.5px solid var(--gold-color);
+  background: linear-gradient(135deg, rgba(180, 83, 9, 0.08), rgba(245, 158, 11, 0.03));
+}
+
+.grand-poem-chars {
+  font-family: var(--font-serif, "Noto Serif SC", serif);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--accent-color);
+  letter-spacing: 4px;
+}
+
+.grand-poem-chars .highlight-char {
+  color: #b45309;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.grand-poem-pinyin {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  letter-spacing: 0.5px;
+}
+
 .poem-stanza-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
