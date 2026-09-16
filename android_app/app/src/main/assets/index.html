@@ -25,6 +25,9 @@
     </div>
 
     <div class="top-right">
+      <button id="aboutMeBtn" class="icon-btn highlight-icon-btn" aria-label="About Me" title="About Me (祝明灿 · 19th Gen)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </button>
       <button id="autoScrollBtn" class="icon-btn" aria-label="Auto Scroll" title="Auto Scroll">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
       </button>
@@ -96,6 +99,7 @@
           <button class="guide-pill" data-target="guidePeople">Key People</button>
           <button class="guide-pill" data-target="guidePoem">Naming Poem</button>
           <button class="guide-pill" data-target="guideMandate">20-Year Mandate</button>
+          <button class="guide-pill highlight-pill" data-target="guideAboutMe">About Me (Ts. Dr. 祝明灿)</button>
         </div>
 
         <!-- Section A: Timeline -->
@@ -176,130 +180,268 @@
           </div>
         </section>
 
-        <!-- Section B: Family Tree -->
+        <!-- Section B: Interactive Family Tree & Spokes-and-Hub Network -->
         <section id="guideTree" class="guide-section">
-          <h2 class="guide-sec-title">Simplified Lineage Tree</h2>
-          <div class="tree-container">
-            <div class="tree-node ancient-node">
-              <div class="node-badge">Mythological Roots</div>
-              <div class="node-title">Yellow Emperor (黄帝) ➔ Zhurong (祝融)</div>
-              <div class="node-desc">State of Zhu (Shandong, 1046 BC) ➔ Taiyuan Commandery (Shanxi)</div>
+          <div class="tree-header-row">
+            <div>
+              <h2 class="guide-sec-title">祝氏家族世系网络与族谱树 (Family Tree)</h2>
+              <p class="guide-sec-subtitle">Interactive Spokes-and-Hub network & 21-generation lineage tree. Click any ancestor to trace father-son roots.</p>
             </div>
-            <div class="tree-connector">↓</div>
+          </div>
 
-            <div class="tree-node island-node">
-              <div class="node-badge">Hainan Founding Ancestor</div>
-              <div class="node-title">Lord Zhu Dehui (祝德辉公)</div>
-              <div class="node-desc">Imperial Magistrate in Wanyang (Wanning) from Fujian (Dexing)</div>
+          <!-- Tree Controls Toolbar -->
+          <div class="tree-toolbar">
+            <div class="tree-view-tabs">
+              <button class="tree-tab-btn active" id="btnTreeSpokes" data-tree-mode="spokes">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><circle cx="12" cy="3" r="2"/><circle cx="12" cy="21" r="2"/><circle cx="3" cy="12" r="2"/><circle cx="21" cy="12" r="2"/><line x1="12" y1="5" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="19"/><line x1="5" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="19" y2="12"/></svg>
+                <span>Spokes & Hub (Radial Focus)</span>
+              </button>
+              <button class="tree-tab-btn" id="btnTreeHierarchy" data-tree-mode="hierarchy">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="6" rx="1"/><rect x="14" y="3" width="7" height="6" rx="1"/><rect x="8.5" y="15" width="7" height="6" rx="1"/><path d="M6.5 9v3a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M12 13v2"/></svg>
+                <span>Full Lineage Tree</span>
+              </button>
+              <button class="tree-tab-btn" id="btnTreeSummary" data-tree-mode="summary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                <span>Summary Overview</span>
+              </button>
             </div>
-            <div class="tree-connector">↓ [5 Generations]</div>
 
-            <div class="tree-node founder-node">
-              <div class="node-badge">1st Generation (Wenchang Founder)</div>
-              <div class="node-title">Lord Zhu Gao (祝高)</div>
-              <div class="node-desc">Moved to Gaolong Village, Wenchang. m. Lady Yang (万州) & Lady Lin (文昌)</div>
+            <!-- Quick Jump Chips -->
+            <div class="tree-quick-shortcuts">
+              <button class="tree-chip-btn active" id="chipFocusMe" title="Center on Zhu Mingcan (19th Gen)">
+                ★ 祝明灿 (Me / 19th)
+              </button>
+              <button class="tree-chip-btn" id="chipFocusFather" title="Center on Father Zhu Shengjin (18th Gen)">
+                祝圣进 (Father / 18th)
+              </button>
+              <button class="tree-chip-btn" id="chipFocusFounder" title="Center on Wenchang Founding Ancestor Zhu Gao">
+                👑 始祖 祝高 (1st Gen)
+              </button>
+              <button class="tree-chip-btn" id="chipFocusOverseas" title="Center on Singapore / Malaysia Nanyang Branch">
+                🌏 新加坡/马来西亚 (Nanyang)
+              </button>
+              <button class="tree-chip-btn" id="chipFocusRestored" title="Center on Restored Branches #66-#82 (Pages 82-83)">
+                📜 82-83页世系分支
+              </button>
             </div>
-            <div class="tree-connector">↓</div>
 
-            <div class="tree-node">
-              <div class="node-badge">2nd Generation</div>
-              <div class="node-title">Zhu Long (祝隆)</div>
-            </div>
-            <div class="tree-connector">↓</div>
-
-            <div class="tree-node">
-              <div class="node-badge">3rd Generation</div>
-              <div class="node-title">Zhu Yi (祝裔)</div>
-            </div>
-            <div class="tree-connector">↓</div>
-
-            <div class="tree-split-box">
-              <div class="tree-node split-node">
-                <div class="node-badge">4th Gen Branch A</div>
-                <div class="node-title">Zhu Jing (祝景)</div>
-                <div class="node-desc">Gaolong Senior Branch</div>
+            <!-- Search & Branch Filter Bar -->
+            <div class="tree-filter-bar">
+              <div class="tree-search-box">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="treeSearchInput" placeholder="Search tree by name, pinyin, or location (e.g. 明灿, 德辉, Singapore)..." />
+                <button id="treeSearchClearBtn" class="tree-search-clear" style="display: none;">&times;</button>
               </div>
-              <div class="tree-node split-node">
-                <div class="node-badge">4th Gen Branch B</div>
-                <div class="node-title">Zhu Ting (祝廷)</div>
-                <div class="node-desc">Wenchang & Wanning Spreading Branch</div>
+
+              <div class="tree-branch-select-box">
+                <select id="treeBranchFilter" class="tree-select">
+                  <option value="all">All Branches (全部房支)</option>
+                  <option value="gaolong">Gaolong Senior House (清澜高隆长房)</option>
+                  <option value="junior">Junior House & Xinqiao (次房新桥支)</option>
+                  <option value="overseas">Southeast Asia Diaspora (南洋/新加坡/大马)</option>
+                  <option value="restored">Pages 82-83 Restored Branches (82-83页分支)</option>
+                </select>
+              </div>
+
+              <div class="tree-zoom-box">
+                <button id="treeZoomInBtn" class="tree-icon-btn" title="Zoom In">+</button>
+                <button id="treeZoomOutBtn" class="tree-icon-btn" title="Zoom Out">-</button>
+                <button id="treeZoomResetBtn" class="tree-icon-btn" title="Reset View">Fit</button>
               </div>
             </div>
-            <div class="tree-connector">↓</div>
+          </div>
 
-            <div class="tree-node" style="border-left: 3px solid #b45309; background: #fffbeb;">
-              <div class="node-badge" style="background:#b45309;color:#fff;">Restored Branches #66–#82 (Pages 82–83)</div>
-              <div class="node-title">Descendants of Zhu Ting (廷质子)</div>
-              <div class="node-desc" style="text-align: left; line-height: 1.6; margin-top: 6px;">
-                <strong>• Wenwang Branch (文旺公):</strong><br/>
-                &nbsp;&nbsp;➔ <em>Tianwei (天为):</em> Biqi (必起 ➔ #66有严, #67有瑁, #68有翼), Bishou (必寿 ➔ #69有敏), Biling (必龄 ➔ #70有隆, #71有纪, #72有惠, #73有焕)<br/>
-                &nbsp;&nbsp;➔ <em>Tianhua (天华):</em> Bi'en (必恩 ➔ #74有朋, #75有信, #76有觉, #77有琰, #78有恭, #79有简, 有登)<br/>
-                <strong>• Wenhong Branch (文弘公):</strong><br/>
-                &nbsp;&nbsp;➔ <em>Tianzhong (天忠):</em> Bihui (必慧 ➔ #80有简), Bichuan (必传 ➔ #81有璟, #82有能)
+          <!-- Interactive Visualization Stage -->
+          <div class="tree-stage-container" id="treeStageContainer">
+            <!-- View 1: Spokes & Hub (Radial Focus) -->
+            <div class="tree-display-view active" id="treeSpokesView">
+              <div class="spokes-canvas-wrapper" id="spokesCanvasWrapper">
+                <!-- SVG / Hub rendered via JS -->
               </div>
             </div>
-            <div class="tree-connector">↓</div>
 
-            <div class="tree-node">
-              <div class="node-badge">5th – 8th Generations</div>
-              <div class="node-title">Tian (天) ➔ Bi (必) ➔ Qiu / You / Chuan / Wen ➔ Ji / Zhen</div>
-              <div class="node-desc">Branching across Gaolong, Xinqiao, Penglai, Longlou, Wenjiao, Xitian</div>
+            <!-- View 2: Full Hierarchy Tree View -->
+            <div class="tree-display-view" id="treeHierarchyView">
+              <div class="hierarchy-tree-wrapper" id="hierarchyTreeWrapper">
+                <!-- Hierarchy tree rendered via JS -->
+              </div>
             </div>
-            <div class="tree-connector">↓</div>
 
-            <div class="tree-node pact-node">
-              <div class="node-badge">14th Generation (Xing 兴)</div>
-              <div class="node-title">Zhu Xinchuan (祝心传)</div>
-              <div class="node-desc">Author of 1895 Joint Lineage Pact between Wanning and Wenchang</div>
+            <!-- View 3: Summary Overview (Original simplified card tree) -->
+            <div class="tree-display-view" id="treeSummaryView">
+              <div class="tree-container">
+                <div class="tree-node ancient-node">
+                  <div class="node-badge">Mythological Roots</div>
+                  <div class="node-title">Yellow Emperor (黄帝) ➔ Zhurong (祝融)</div>
+                  <div class="node-desc">State of Zhu (Shandong, 1046 BC) ➔ Taiyuan Commandery (Shanxi)</div>
+                </div>
+                <div class="tree-connector">↓</div>
+
+                <div class="tree-node island-node">
+                  <div class="node-badge">Hainan Founding Ancestor</div>
+                  <div class="node-title">Lord Zhu Dehui (祝德辉公)</div>
+                  <div class="node-desc">Imperial Magistrate in Wanyang (Wanning) from Fujian (Dexing)</div>
+                </div>
+                <div class="tree-connector">↓ [5 Generations]</div>
+
+                <div class="tree-node founder-node">
+                  <div class="node-badge">1st Generation (Wenchang Founder)</div>
+                  <div class="node-title">Lord Zhu Gao (祝高)</div>
+                  <div class="node-desc">Moved to Gaolong Village, Wenchang. m. Lady Yang (万州) & Lady Lin (文昌)</div>
+                </div>
+                <div class="tree-connector">↓</div>
+
+                <div class="tree-node">
+                  <div class="node-badge">2nd Generation</div>
+                  <div class="node-title">Zhu Long (祝隆)</div>
+                </div>
+                <div class="tree-connector">↓</div>
+
+                <div class="tree-node">
+                  <div class="node-badge">3rd Generation</div>
+                  <div class="node-title">Zhu Yi (祝裔)</div>
+                </div>
+                <div class="tree-connector">↓</div>
+
+                <div class="tree-split-box">
+                  <div class="tree-node split-node">
+                    <div class="node-badge">4th Gen Branch A</div>
+                    <div class="node-title">Zhu Jing (祝景)</div>
+                    <div class="node-desc">Gaolong Senior Branch</div>
+                  </div>
+                  <div class="tree-node split-node">
+                    <div class="node-badge">4th Gen Branch B</div>
+                    <div class="node-title">Zhu Ting (祝廷)</div>
+                    <div class="node-desc">Wenchang & Wanning Spreading Branch</div>
+                  </div>
+                </div>
+                <div class="tree-connector">↓</div>
+
+                <div class="tree-node" style="border-left: 3px solid #b45309; background: #fffbeb;">
+                  <div class="node-badge" style="background:#b45309;color:#fff;">Restored Branches #66–#82 (Pages 82–83)</div>
+                  <div class="node-title">Descendants of Zhu Ting (廷质子)</div>
+                  <div class="node-desc" style="text-align: left; line-height: 1.6; margin-top: 6px;">
+                    <strong>• Wenwang Branch (文旺公):</strong><br/>
+                    &nbsp;&nbsp;➔ <em>Tianwei (天为):</em> Biqi (必起 ➔ #66有严, #67有瑁, #68有翼), Bishou (必寿 ➔ #69有敏), Biling (必龄 ➔ #70有隆, #71有纪, #72有惠, #73有焕)<br/>
+                    &nbsp;&nbsp;➔ <em>Tianhua (天华):</em> Bi'en (必恩 ➔ #74有朋, #75有信, #76有觉, #77有琰, #78有恭, #79有简, 有登)<br/>
+                    <strong>• Wenhong Branch (文弘公):</strong><br/>
+                    &nbsp;&nbsp;➔ <em>Tianzhong (天忠):</em> Bihui (必慧 ➔ #80有简), Bichuan (必传 ➔ #81有璟, #82有能)
+                  </div>
+                </div>
+                <div class="tree-connector">↓</div>
+
+                <div class="tree-node">
+                  <div class="node-badge">5th – 8th Generations</div>
+                  <div class="node-title">Tian (天) ➔ Bi (必) ➔ Qiu / You / Chuan / Wen ➔ Ji / Zhen</div>
+                  <div class="node-desc">Branching across Gaolong, Xinqiao, Penglai, Longlou, Wenjiao, Xitian</div>
+                </div>
+                <div class="tree-connector">↓</div>
+
+                <div class="tree-node pact-node">
+                  <div class="node-badge">14th Generation (Xing 兴)</div>
+                  <div class="node-title">Zhu Xinchuan (祝心传)</div>
+                  <div class="node-desc">Author of 1895 Joint Lineage Pact between Wanning and Wenchang</div>
+                </div>
+                <div class="tree-connector">↓</div>
+
+                <div class="tree-node">
+                  <div class="node-badge">15th Generation (Sheng 声)</div>
+                  <div class="node-title">Sheng Generation (声字派)</div>
+                  <div class="node-desc">Pioneers of the Xia Nanyang migration to Southeast Asia</div>
+                </div>
+                <div class="tree-connector">↓</div>
+
+                <div class="tree-node author-node">
+                  <div class="node-badge">16th Generation (Chao 朝)</div>
+                  <div class="node-title">Zhu Zhaoke (祝朝克)</div>
+                  <div class="node-desc">Compiler and Author of the 2007 Wenchang Zhu Family Lineage</div>
+                </div>
+                <div class="tree-connector">↓</div>
+
+                <div class="tree-node">
+                  <div class="node-badge">17th Generation (Jia 家)</div>
+                  <div class="node-title">Jia Generation (家字派)</div>
+                  <div class="node-desc">Zhu Jiameng / Zhaomeng (Manuscript Reviewer) & Household Heads</div>
+                </div>
+                <div class="tree-connector">↓</div>
+
+                <div class="tree-node father-node">
+                  <div class="node-badge">18th Generation (Sheng 圣)</div>
+                  <div class="node-title">Sheng Generation (圣字派)</div>
+                  <div class="node-desc">Zhu Shengjin (祝圣进 - Paternal line), Shengli (圣利 - Malaysia), etc.</div>
+                </div>
+                <div class="tree-connector">↓</div>
+
+                <div class="tree-node you-node">
+                  <div class="node-badge current-badge">★ YOUR GENERATION ★ (19th)</div>
+                  <div class="node-title">Ming Generation (明 / 铭字派)</div>
+                  <div class="node-desc"><strong>Zhu Mingcan (祝明灿)</strong>, Mingwei (明伟), Mingcheng (明诚), Mingjian (明坚), Mingtai (明泰)</div>
+                </div>
+                <div class="tree-connector">↓</div>
+
+                <div class="tree-node child-node">
+                  <div class="node-badge">20th Generation (Children's Gen)</div>
+                  <div class="node-title">Yun Generation (运字派)</div>
+                  <div class="node-desc">Meaning: Fortune, Destiny, Motion</div>
+                </div>
+                <div class="tree-connector">↓</div>
+
+                <div class="tree-node future-node">
+                  <div class="node-badge">21st – 34th Generations</div>
+                  <div class="node-title">Ji ➔ Chang ➔ Qi ➔ Ying ➔ Xian ➔ Si ➔ Da...</div>
+                  <div class="node-desc">Full sequence codified in the ancestral generational poem</div>
+                </div>
+              </div>
             </div>
-            <div class="tree-connector">↓</div>
+          </div>
 
-            <div class="tree-node">
-              <div class="node-badge">15th Generation (Sheng 声)</div>
-              <div class="node-title">Sheng Generation (声字派)</div>
-              <div class="node-desc">Pioneers of the Xia Nanyang migration to Southeast Asia</div>
+          <!-- Person Inspector Drawer / Bottom Card -->
+          <div class="tree-inspector-panel" id="treeInspectorPanel">
+            <div class="inspector-header">
+              <div class="inspector-identity">
+                <span class="inspector-gen-badge" id="inspectorGenBadge">19th Gen · 明字辈</span>
+                <h3 class="inspector-name" id="inspectorName">祝明灿 (Zhu Mingcan)</h3>
+                <span class="inspector-pinyin" id="inspectorPinyin">Zhù Míngcàn</span>
+              </div>
+              <div class="inspector-actions">
+                <button class="inspector-book-btn" id="inspectorBookBtn" title="View original page in Scan mode">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                  <span id="inspectorBookPageLabel">Book Page 44</span>
+                </button>
+              </div>
             </div>
-            <div class="tree-connector">↓</div>
 
-            <div class="tree-node author-node">
-              <div class="node-badge">16th Generation (Chao 朝)</div>
-              <div class="node-title">Zhu Zhaoke (祝朝克)</div>
-              <div class="node-desc">Compiler and Author of the 2007 Wenchang Zhu Family Lineage</div>
+            <!-- Direct Paternal Lineage Path -->
+            <div class="inspector-path-section">
+              <div class="inspector-section-label">Direct Paternal Lineage / 直系祖辈脉络 (始祖 ➔ Father ➔ Person):</div>
+              <div class="inspector-breadcrumbs" id="inspectorBreadcrumbs">
+                <!-- Breadcrumb chips injected via JS -->
+              </div>
             </div>
-            <div class="tree-connector">↓</div>
 
-            <div class="tree-node">
-              <div class="node-badge">17th Generation (Jia 家)</div>
-              <div class="node-title">Jia Generation (家字派)</div>
-              <div class="node-desc">Zhu Jiameng / Zhaomeng (Manuscript Reviewer) & Household Heads</div>
+            <!-- Family Ties Grid -->
+            <div class="inspector-ties-grid">
+              <div class="inspector-tie-box">
+                <span class="tie-label">Father (父亲):</span>
+                <div class="tie-content" id="inspectorFatherBox">-</div>
+              </div>
+              <div class="inspector-tie-box">
+                <span class="tie-label">Sons / Children (子嗣):</span>
+                <div class="tie-content" id="inspectorChildrenBox">-</div>
+              </div>
+              <div class="inspector-tie-box">
+                <span class="tie-label">Brothers / Peers (堂兄弟):</span>
+                <div class="tie-content" id="inspectorBrothersBox">-</div>
+              </div>
+              <div class="inspector-tie-box">
+                <span class="tie-label">Branch & Location (房支与迁居):</span>
+                <div class="tie-content" id="inspectorLocationBox">-</div>
+              </div>
             </div>
-            <div class="tree-connector">↓</div>
 
-            <div class="tree-node father-node">
-              <div class="node-badge">18th Generation (Sheng 圣)</div>
-              <div class="node-title">Sheng Generation (圣字派)</div>
-              <div class="node-desc">Zhu Shengjin (祝圣进 - Paternal line), Shengli (圣利 - Malaysia), etc.</div>
-            </div>
-            <div class="tree-connector">↓</div>
-
-            <div class="tree-node you-node">
-              <div class="node-badge current-badge">★ YOUR GENERATION ★ (19th)</div>
-              <div class="node-title">Ming Generation (明 / 铭字派)</div>
-              <div class="node-desc"><strong>Zhu Mingcan (祝明灿)</strong>, Mingwei (明伟), Mingcheng (明诚), Mingjian (明坚), Mingtai (明泰)</div>
-            </div>
-            <div class="tree-connector">↓</div>
-
-            <div class="tree-node child-node">
-              <div class="node-badge">20th Generation (Children's Gen)</div>
-              <div class="node-title">Yun Generation (运字派)</div>
-              <div class="node-desc">Meaning: Fortune, Destiny, Motion</div>
-            </div>
-            <div class="tree-connector">↓</div>
-
-            <div class="tree-node future-node">
-              <div class="node-badge">21st – 34th Generations</div>
-              <div class="node-title">Ji ➔ Chang ➔ Qi ➔ Ying ➔ Xian ➔ Si ➔ Da...</div>
-              <div class="node-desc">Full sequence codified in the ancestral generational poem</div>
+            <div class="inspector-notes-box">
+              <span class="tie-label">Historical Notes (世系记述):</span>
+              <p id="inspectorNotesText">-</p>
             </div>
           </div>
         </section>
@@ -361,8 +503,67 @@
         <!-- Section D: Naming Poem -->
         <section id="guidePoem" class="guide-section">
           <h2 class="guide-sec-title">Generational Naming Code (字辈 / 派序)</h2>
-          <p class="poem-intro">The generational poem serves as a genealogical naming code. Every male child in a generation receives a given name containing the designated character:</p>
+          <p class="poem-intro">The generational poem (字辈诗) is both a rhythmic cryptographic code for global kinship verification and a philosophical roadmap composed to guide future generations. Arranged in classical five-character stanzas (五言排律), each generation bears a pre-designated character:</p>
           
+          <!-- Philosophical Meaning & Poetic Couplets Breakdown -->
+          <div class="poem-interpretation-card">
+            <div class="poem-card-header">
+              <span class="poem-badge">Classical Five-Character Stanzas (五言排律)</span>
+              <h3>The 4 Prophetic Couplets of Clan Evolution (诗意解析与宗族发展蓝图)</h3>
+            </div>
+            
+            <div class="poem-stanza-grid">
+              <div class="poem-stanza">
+                <div class="stanza-header">
+                  <span class="stanza-period">14th – 18th Gen</span>
+                  <div class="stanza-chinese">兴 · 声 · 朝 · 家 · 圣</div>
+                </div>
+                <div class="stanza-pinyin">Xīng · Shēng · Cháo · Jiā · Shèng</div>
+                <div class="stanza-meaning">
+                  <strong>The Rise of Virtue & Global Migration (勃兴开泰 · 德播四海):</strong><br/>
+                  The clan revitalizes with rising energy (<strong>兴</strong>), spreads its renown abroad across Southeast Asia / Nanyang (<strong>声</strong>), diligently serves in civic and public spheres (<strong>朝</strong>), solidifies unified household harmony and filial ethics (<strong>家</strong>), and attains sagely classical virtue (<strong>圣</strong> · father Zhu Shengjin).
+                </div>
+              </div>
+
+              <div class="poem-stanza highlight-stanza">
+                <div class="stanza-badge">★ Your Generation & Children (祝明灿直系所处盛世)</div>
+                <div class="stanza-header">
+                  <span class="stanza-period">19th – 23rd Gen</span>
+                  <div class="stanza-chinese">明 · 运 · 际 · 昌 · 期</div>
+                </div>
+                <div class="stanza-pinyin">Míng · Yùn · Jì · Chāng · Qī</div>
+                <div class="stanza-meaning">
+                  <strong>The Golden Era of Destiny (明澈照远 · 际会盛运):</strong><br/>
+                  Enlightened minds and clear foresight (<strong>明</strong> · 19th Gen / <strong>祝明灿</strong>) embrace the surging tide of fortune and destiny (<strong>运</strong> · 20th Gen / <strong>Your Children</strong>), meeting historic world opportunities (<strong>际</strong>) in a glorious golden season of thriving abundance and enduring fulfillment (<strong>昌期</strong>).
+                </div>
+              </div>
+
+              <div class="poem-stanza">
+                <div class="stanza-header">
+                  <span class="stanza-period">24th – 28th Gen</span>
+                  <div class="stanza-chinese">英 · 贤 · 斯 · 大 · 崇</div>
+                </div>
+                <div class="stanza-pinyin">Yīng · Xián · Sī · Dà · Chóng</div>
+                <div class="stanza-meaning">
+                  <strong>Heroic Leadership & Ethical Eminence (群英荟萃 · 宗风崇隆):</strong><br/>
+                  Future lineages continuously bring forth outstanding talents and heroes (<strong>英</strong>) alongside upright, benevolent scholars (<strong>贤</strong>), who thus (<strong>斯</strong>) realize magnanimous life achievements (<strong>大</strong>) and reach the pinnacle of communal esteem and ethical respect (<strong>崇</strong>).
+                </div>
+              </div>
+
+              <div class="poem-stanza">
+                <div class="stanza-header">
+                  <span class="stanza-period">29th – 34th Gen</span>
+                  <div class="stanza-chinese">盛 · 美 · 显 · 荣 · 邦</div>
+                </div>
+                <div class="stanza-pinyin">Shèng · Měi · Xiǎn · Róng · Bāng (国)</div>
+                <div class="stanza-meaning">
+                  <strong>Timeless Harmony & Civic Legacy (盛世美德 · 显耀家国):</strong><br/>
+                  Culminating at the apex of material and cultural flourishing (<strong>盛</strong>) and moral beauty (<strong>美</strong>), their noble contributions shine prominently (<strong>显</strong>), bestowing everlasting honor and glory upon both the Zhu family and the commonwealth of nations (<strong>荣邦国</strong>).
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="poem-table-wrapper">
             <table class="poem-table">
               <thead>
@@ -419,6 +620,185 @@
               <div class="mandate-author">— Zhu Zhaoke (祝朝克), Haikou, November 2007</div>
             </blockquote>
             <p class="mandate-note">As 2027 approaches, this mobile application and digital archive fulfill that 20-year cycle, ensuring that descendants across the globe retain their living connection to Gaolong Village and Founding Ancestor Zhu Gao.</p>
+          </div>
+        </section>
+
+        <!-- Section F: About Me (Ts. Dr. 祝明灿 · 19th Generation) -->
+        <section id="guideAboutMe" class="guide-section">
+          <div class="about-me-card">
+            <div class="about-me-header">
+              <div class="about-me-avatar">祝</div>
+              <div class="about-me-title-box">
+                <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+                  <span class="about-me-badge">19th Generation · 明字辈</span>
+                  <span class="about-me-badge academic-badge">Ts. Dr. · 博士 · 专业技师</span>
+                </div>
+                <h2 class="about-me-name">Ts. Dr. 祝明灿 (Timothy Tok / 铭灿)</h2>
+                <div class="about-me-hall">太原堂 · 清澜高隆长房 · 博士 / 注册专业技师 (Ts. Dr.) · 族谱数字化架构师</div>
+              </div>
+            </div>
+
+            <div class="about-me-summary-box">
+              <div class="about-bilingual-block">
+                <div class="lang-zh">
+                  <strong>【中文简介】</strong> 欢迎查阅《海南文昌祝氏族谱》数字化传承版。作为海南文昌清澜高隆长房第十九世“明/铭”字辈后人，<strong>祝明灿 博士 / 注册专业技师（Ts. Dr. Timothy Tok）</strong> 融汇深厚的学术研究底蕴与企业级大数据架构经验，肩负起宗族传承与数智化建档的历史使命。通过将现代大数据工程、知识图谱拓扑建模与跨平台离线技术相结合，致力于将全谱文献与二十一世祖脉完整数字化、中英双语化，谨遵先贤二十年续修遗训，让全球宗亲世代相连、根脉长存。
+                </div>
+                <div class="lang-en">
+                  <strong>[English Summary]</strong> Welcome to the <strong>Hainan Wenchang Zhu Family Lineage (文昌祝氏族谱)</strong> digital preservation edition. As a 19th-generation descendant bearing the generational marker <strong>"Ming" (明 / 铭)</strong>, <strong>Ts. Dr. Timothy Tok (祝明灿 / 铭灿)</strong> brings together doctoral research rigor, enterprise data architecture, and deep genealogical devotion. By synthesizing modern data science, graph lineage modeling, and cross-platform mobile engineering with our 21-generation heritage, I have developed this interactive bilingual archive and offline Android application to honor our ancestors and fulfill the sacred 20-year mandate for our global clan.
+                </div>
+              </div>
+            </div>
+
+            <div class="about-me-details-grid">
+              <div class="about-me-item academic-item">
+                <span class="item-label">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                  Academic Credentials & Professional Summary (学术资历与专业履历 · 中英对照)
+                </span>
+                <div class="item-value">
+                  <div class="bilingual-entry">
+                    <span class="bilingual-zh">• <strong>学术与专业头衔：</strong> Ts. Dr. Timothy Tok（祝明灿 博士 / 注册专业技师 · 十九世明字辈）</span>
+                    <span class="bilingual-en">• <strong>Academic & Professional Title:</strong> Ts. Dr. Timothy Tok (Ming-chan Tok / Zhu Mingcan) · Ph.D. & Professional Technologist</span>
+                  </div>
+                  <div class="bilingual-entry">
+                    <span class="bilingual-zh">• <strong>法定专业认证：</strong> 马来西亚技术员局（MBOT）法定注册专业技师（<strong>Ts.</strong>）；Snowflake 官方认证专业资质</span>
+                    <span class="bilingual-en">• <strong>Professional Credential:</strong> Registered Professional Technologist (<strong>Ts.</strong>) — Malaysia Board of Technologists (MBOT); Snowflake Accredited</span>
+                  </div>
+                  <div class="bilingual-entry">
+                    <span class="bilingual-zh">• <strong>行业领导职务：</strong> Awantec（AwanBiru Technology Berhad）分析与数据总监（<strong>Head of Analytics</strong>），主导东盟区域大型企业级数据仓库、商业智能及云端数据分析解决方案</span>
+                    <span class="bilingual-en">• <strong>Executive Leadership:</strong> <strong>Head of Analytics</strong> at Awantec (AwanBiru Technology Berhad), leading enterprise DW/BI, cloud data solutions, and analytics transformation across the ASEAN region</span>
+                  </div>
+                  <div class="bilingual-entry">
+                    <span class="bilingual-zh">• <strong>学术与专长领域：</strong> 高级数据科学、大数据与解决方案架构、知识图谱系统、生成式人工智能与大语言模型（LLMs）</span>
+                    <span class="bilingual-en">• <strong>Specialized Domains:</strong> Advanced Data Science, Big Data Architecture, Solution Architecture, Knowledge Systems & Generative AI / LLMs</span>
+                  </div>
+                  <div class="bilingual-entry">
+                    <span class="bilingual-zh">• <strong>青年与行业导师：</strong> 自2021年起担任 <strong>FutureLab</strong> 行业导师，深度指导青年专业人才在数据科学、分析战略与创新思维方向成长</span>
+                    <span class="bilingual-en">• <strong>Industry Mentorship:</strong> Longstanding mentor on <strong>FutureLab</strong> since 2021, coaching professionals & graduates in Data Science, Strategy, Project Management & Design Thinking</span>
+                  </div>
+                  <div class="bilingual-entry">
+                    <span class="bilingual-zh">• <strong>宗族数智化工程：</strong> 《海南文昌祝氏族谱》数字系统总架构师，研发21世同心圆谱系拓扑图、全谱中英双语检索库及跨平台离线独立移动阅读应用</span>
+                    <span class="bilingual-en">• <strong>Heritage Digital Architect:</strong> Applied enterprise graph data modeling and interactive web/Android engineering to digitize, cross-index, and preserve the 21-generation Hainan Wenchang Zhu lineage for global descendants</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="about-me-item">
+                <span class="item-label">Direct Lineage Chain (直系脉络)</span>
+                <div class="item-value">
+                  <div class="bilingual-entry">
+                    <span class="bilingual-zh">始祖 祝高 (1世) ➔ 隆 (2世) ➔ 裔 (3世) ➔ 廷 (4世) ➔ ... ➔ 朝金 (16世) ➔ 家志 (17世) ➔ 圣进 (18世) ➔ <strong>祝明灿 (19世)</strong> ➔ 运 (20世)</span>
+                    <span class="bilingual-en">Founder Zhu Gao (1st) ➔ Long (2nd) ➔ Yi (3rd) ➔ Ting (4th) ➔ ... ➔ Zhaojin (16th) ➔ Jiazhi (17th) ➔ Shengjin (18th) ➔ <strong>Zhu Mingcan (19th)</strong> ➔ Yun (20th)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="about-me-item">
+                <span class="item-label">Immediate Paternal Ties (直系亲属)</span>
+                <div class="item-value">
+                  <div class="bilingual-entry">
+                    <span class="bilingual-zh">• <strong>父亲：</strong> 祝圣进（十八世 · 圣字辈） | <strong>Father:</strong> Zhu Shengjin (18th Gen)</span>
+                    <span class="bilingual-zh">• <strong>同胞及堂兄弟：</strong> 祝明威、祝明成、祝明建、祝明太 | <strong>Brothers & Cousins:</strong> Mingwei, Mingcheng, Mingjian, Mingtai</span>
+                    <span class="bilingual-zh">• <strong>子嗣下代：</strong> 二十世 · 运字派 | <strong>Children:</strong> 20th Generation · Yun Generation</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="about-me-item">
+                <span class="item-label">Family Ancestral Seat (祖籍原居)</span>
+                <div class="item-value">
+                  <div class="bilingual-entry">
+                    <span class="bilingual-zh">海南省文昌市 清澜镇 高隆村 ➔ 迁播南洋（马来西亚、新加坡等）及全球各地</span>
+                    <span class="bilingual-en">Gaolong Village, Qinglan Town, Wenchang City, Hainan ➔ Migrated to Southeast Asia (Malaysia, Singapore) & Worldwide</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="about-me-item">
+                <span class="item-label">Book Location (族谱原件记录)</span>
+                <div class="item-value">
+                  <div class="bilingual-entry">
+                    <span class="bilingual-zh">详载于2007年96页正本族谱 <strong>第44页至45页</strong>（清澜高隆长房世系）</span>
+                    <span class="bilingual-en">Explicitly documented on <strong>Pages 44 and 45</strong> of the 2007 96-page genealogy under the Gaolong Senior Direct Branch</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="about-me-mandate-card">
+              <h3>Fulfilling the 20-Year Sacred Mandate (遵从先贤二十年续修遗训)</h3>
+              <p>2007年11月，十六世修谱执笔者 <strong>祝朝克（Zhu Zhaoke）</strong> 于跋文中郑重嘱托：</p>
+              <blockquote class="about-mandate-quote">
+                “世世代代，继续努力，隔二、三十年，续修一次。告慰先祖，启蒙后代。”<br/>
+                <em>“Generation after generation, continue the effort; update this genealogy every 20 or 30 years. To comfort the ancestors, and enlighten the descendants.”</em>
+              </blockquote>
+              <div class="about-bilingual-block" style="margin-top: 10px;">
+                <div class="lang-zh">
+                  时值修谱二十载之期，本数字化工程不仅将96页族谱历史文献全貌完整留存、重构75页宗支血脉世系，更实现全谱英译与离线跨平台访问，使散居全球之文昌祝氏后人皆能一键溯源，世代不忘根本。
+                </div>
+                <div class="lang-en">
+                  Entering the 20-year cycle, this software digitizes all 96 pages of historical records, transcribes the complete 75-page genealogical tree, provides full English translations, and equips the worldwide family with offline mobile access so that future generations will always know where they come from.
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact & Social Connectivity -->
+            <div class="about-me-connect-card">
+              <div class="connect-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                <h3>Connect & Clan Exchange (宗亲联络 · 交流互通)</h3>
+              </div>
+              <p class="connect-sub">Descendants, clan relatives, and researchers are warmly invited to connect with 祝明灿 (Dr. Timothy Tok):</p>
+
+              <div class="connect-grid">
+                <!-- LinkedIn Card -->
+                <div class="connect-item-card linkedin-card">
+                  <div class="connect-icon-wrap linkedin-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+                  </div>
+                  <div class="connect-info">
+                    <div class="connect-platform">LinkedIn</div>
+                    <div class="connect-name">Dr. Timothy Tok (祝明灿)</div>
+                    <div class="connect-hint">Professional Profile & Global Network</div>
+                  </div>
+                  <a id="linkedinDirectLink" href="https://www.linkedin.com/in/ming-chan-tok-20272819/" target="_blank" rel="noopener noreferrer" class="connect-action-btn linkedin-btn">
+                    <span>Visit LinkedIn</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  </a>
+                </div>
+
+                <!-- WeChat QR Card -->
+                <div class="connect-item-card wechat-card">
+                  <div class="connect-icon-wrap wechat-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8.691 2.188C3.891 2.188 0 5.478 0 9.53c0 2.31 1.26 4.36 3.22 5.67-.14.77-.52 2.21-1.28 3.19 1.57-.18 3.23-.97 4.15-1.61.83.24 1.7.38 2.6.38.29 0 .58-.02.86-.05-.27-.72-.42-1.5-.42-2.31 0-3.6 3.49-6.52 7.8-6.52.26 0 .52.02.77.05C17.06 5.84 13.18 2.188 8.691 2.188zm-2.61 3.96c.64 0 1.16.52 1.16 1.16 0 .64-.52 1.16-1.16 1.16-.64 0-1.16-.52-1.16-1.16 0-.64.52-1.16 1.16-1.16zm5.22 0c.64 0 1.16.52 1.16 1.16 0 .64-.52 1.16-1.16 1.16-.64 0-1.16-.52-1.16-1.16 0-.64.52-1.16 1.16-1.16zm5.88 4.67c-3.79 0-6.86 2.58-6.86 5.76 0 3.18 3.07 5.76 6.86 5.76.71 0 1.39-.1 2.04-.29.72.5 2.03 1.12 3.26 1.26-.6-1.02-.3-2.15-.19-2.75 1.54-1.03 2.53-2.64 2.53-4.46 0-3.18-3.07-5.76-6.86-5.76zm-2.06 3.12c.5 0 .91.41.91.91 0 .5-.41.91-.91.91s-.91-.41-.91-.91c0-.5.41-.91.91-.91zm4.12 0c.5 0 .91.41.91.91 0 .5-.41.91-.91.91s-.91-.41-.91-.91c0-.5.41-.91.91-.91z"/></svg>
+                  </div>
+                  <div class="connect-info">
+                    <div class="connect-platform">WeChat (微信)</div>
+                    <div class="connect-name">Scan QR Code / 扫码添友</div>
+                    <div class="connect-hint">drtiM · Kuala Lumpur, Malaysia · Clan Exchange</div>
+                  </div>
+                  <button type="button" class="connect-action-btn wechat-btn view-qr-btn" data-qr="wechat">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><line x1="7" y1="7" x2="7.01" y2="7"/><line x1="18" y1="7" x2="18.01" y2="7"/><line x1="18" y1="18" x2="18.01" y2="18"/><line x1="7" y1="18" x2="7.01" y2="18"/></svg>
+                    <span>View WeChat QR</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="about-me-actions">
+              <button id="aboutJumpTreeBtn" class="about-action-btn primary-action">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><circle cx="12" cy="3" r="2"/><circle cx="12" cy="21" r="2"/><circle cx="3" cy="12" r="2"/><circle cx="21" cy="12" r="2"/><line x1="12" y1="5" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="19"/><line x1="5" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="19" y2="12"/></svg>
+                <span>View My Place in the Family Tree</span>
+              </button>
+              <button id="aboutJumpPageBtn" class="about-action-btn secondary-action">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                <span>View My Original Record (Page 44)</span>
+              </button>
+              <a href="zhufamily.apk" download="zhufamily.apk" class="about-action-btn apk-action">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993.0001.5511-.4482.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 0 0-.1521-.5676.416.416 0 0 0-.5676.1521l-2.0223 3.503C15.5902 8.4126 13.8533 8.125 12 8.125c-1.8533 0-3.5902.2876-5.1368.8247L4.8409 5.4467a.4161.4161 0 0 0-.5677-.1521.4157.4157 0 0 0-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3432-4.1021-2.6889-7.5743-6.1185-9.4396"/></svg>
+                <span>Download APK for Android</span>
+              </a>
+            </div>
           </div>
         </section>
       </div>
@@ -542,7 +922,207 @@
     </div>
   </div>
 
+  <!-- About Me Modal Overlay -->
+  <div id="aboutMeOverlay" class="modal-overlay">
+    <div class="about-me-modal">
+      <div class="about-modal-header">
+        <div class="about-modal-avatar">祝</div>
+        <div class="about-modal-titles">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+            <span class="about-modal-badge">19th Generation · 明字辈</span>
+            <span class="about-modal-badge academic-badge">Ts. Dr. · 博士 · 专业技师</span>
+          </div>
+          <h2 class="about-modal-name">Ts. Dr. 祝明灿 (Timothy Tok / 铭灿)</h2>
+          <span class="about-modal-sub">太原世家 · 清澜高隆长房 · 博士 / 注册专业技师 · 数字化架构师</span>
+        </div>
+        <button id="closeAboutMeBtn" class="icon-btn close-modal-btn">&times;</button>
+      </div>
+
+      <div class="about-modal-body">
+        <div class="about-modal-bio">
+          <div class="about-bilingual-block">
+            <div class="lang-zh">
+              <strong>【中文简介】</strong> 欢迎查阅《海南文昌祝氏族谱》。作为海南文昌清澜高隆长房第十九世“明/铭”字辈后人，<strong>祝明灿 博士 / 注册专业技师（Ts. Dr. Timothy Tok）</strong> 融汇现代大数据科学与企业级系统架构，致力宗族文献数字化与知识图谱工程，弘扬先祖德业，谨遵二十年续修遗训。
+            </div>
+            <div class="lang-en">
+              <strong>[English Summary]</strong> Welcome to the <strong>Hainan Wenchang Zhu Family Lineage (文昌祝氏族谱)</strong>. As a 19th-generation descendant bearing the generational marker <strong>"Ming" (明 / 铭)</strong>, <strong>Ts. Dr. Timothy Tok (祝明灿)</strong> brings together doctoral research rigor and enterprise data architecture to preserve our ancestral heritage for current and future generations worldwide.
+            </div>
+          </div>
+        </div>
+
+        <div class="about-modal-grid">
+          <div class="about-modal-cell academic-cell">
+            <span class="cell-label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              Academic Credentials & Professional Summary (学术资历与专业履历)
+            </span>
+            <div class="cell-value">
+              <div class="bilingual-entry">
+                <span class="bilingual-zh">• <strong>资质头衔：</strong> Ts. Dr. 祝明灿（博士 · 马来西亚技术员局 MBOT 注册专业技师 · Snowflake认证）</span>
+                <span class="bilingual-en">• <strong>Credentials:</strong> Ts. Dr. Timothy Tok (Doctorate / Registered Professional Technologist — MBOT; Snowflake Accredited)</span>
+              </div>
+              <div class="bilingual-entry">
+                <span class="bilingual-zh">• <strong>行业领导职务：</strong> Awantec 分析与数据总监（Head of Analytics），主导东盟区域企业级数据与AI架构</span>
+                <span class="bilingual-en">• <strong>Executive Role:</strong> Head of Analytics at Awantec; leading enterprise DW/BI, cloud platforms & AI strategy in ASEAN</span>
+              </div>
+              <div class="bilingual-entry">
+                <span class="bilingual-zh">• <strong>专业与导师：</strong> 高级数据科学、大数据架构、生成式AI；FutureLab 行业导师（自2021年）</span>
+                <span class="bilingual-en">• <strong>Domains & Mentor:</strong> Data Science, Solution Architecture, Generative AI; FutureLab Industry Mentor since 2021</span>
+              </div>
+              <div class="bilingual-entry">
+                <span class="bilingual-zh">• <strong>宗族数智化：</strong> 《海南文昌祝氏族谱》数字化系统总架构师，研发21世同心圆树状图与中英双语检索</span>
+                <span class="bilingual-en">• <strong>Clan Digital Architect:</strong> Architect of the Zhu Family Knowledge Graph, 21-gen tree topology & bilingual reader</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-modal-cell">
+            <span class="cell-label">Direct Paternal Chain (直系祖脉)</span>
+            <div class="cell-value">
+              <div class="bilingual-entry">
+                <span class="bilingual-zh">祝高 (1世) ➔ 隆 ➔ 裔 ➔ 廷 ➔ ... ➔ 朝金 (16世) ➔ 家志 (17世) ➔ 圣进 (18世) ➔ <strong>祝明灿 (19世)</strong> ➔ 运 (20世)</span>
+                <span class="bilingual-en">Zhu Gao (1st) ➔ Long ➔ Yi ➔ Ting ➔ ... ➔ Zhaojin ➔ Jiazhi ➔ Shengjin (18th) ➔ <strong>Zhu Mingcan (19th)</strong> ➔ Yun (20th)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-modal-cell">
+            <span class="cell-label">Immediate Paternal Ties (直系亲属)</span>
+            <div class="cell-value">
+              <div class="bilingual-entry">
+                <span class="bilingual-zh">• <strong>父亲：</strong> 祝圣进（十八世 · 圣字辈） | <strong>Father:</strong> Zhu Shengjin (18th Gen)</span>
+                <span class="bilingual-zh">• <strong>同胞兄弟：</strong> 祝明威、祝明成、祝明建、祝明太 | <strong>Brothers:</strong> Mingwei, Mingcheng, Mingjian, Mingtai</span>
+                <span class="bilingual-zh">• <strong>子嗣：</strong> 二十世 · 运字派 | <strong>Children:</strong> 20th Generation · Yun Generation</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-modal-cell">
+            <span class="cell-label">Lineage Record in Original Book (原谱记录)</span>
+            <div class="cell-value">
+              <div class="bilingual-entry">
+                <span class="bilingual-zh">详载于2007年正本族谱 <strong>第44与45页</strong>（清澜高隆长房世系）</span>
+                <span class="bilingual-en">Documented on <strong>Pages 44 & 45</strong> of the 2007 book under Gaolong Senior Direct Branch</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-modal-cell">
+            <span class="cell-label">Generational Mission (二十年续修使命)</span>
+            <div class="cell-value">
+              <div class="bilingual-entry">
+                <span class="bilingual-zh">谨遵十六世祝朝克2007年“隔二、三十年续修一次”之遗训，数智联通新加坡、马来西亚及全球宗亲。</span>
+                <span class="bilingual-en">Fulfilling the mandate set by compiler Zhu Zhaoke to renew lineage every 20-30 years, connecting global family worldwide.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mini Connect Bar in About Modal -->
+        <div class="about-modal-connect-bar">
+          <span class="connect-bar-title">Connect with 祝明灿:</span>
+          <div class="connect-bar-buttons">
+            <a href="https://www.linkedin.com/in/ming-chan-tok-20272819/" target="_blank" rel="noopener noreferrer" class="mini-connect-btn linkedin-mini" title="LinkedIn Profile">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+              <span>LinkedIn</span>
+            </a>
+            <button type="button" class="mini-connect-btn wechat-mini view-qr-btn" data-qr="wechat" title="WeChat QR Code">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8.691 2.188C3.891 2.188 0 5.478 0 9.53c0 2.31 1.26 4.36 3.22 5.67-.14.77-.52 2.21-1.28 3.19 1.57-.18 3.23-.97 4.15-1.61.83.24 1.7.38 2.6.38.29 0 .58-.02.86-.05-.27-.72-.42-1.5-.42-2.31 0-3.6 3.49-6.52 7.8-6.52.26 0 .52.02.77.05C17.06 5.84 13.18 2.188 8.691 2.188zm-2.61 3.96c.64 0 1.16.52 1.16 1.16 0 .64-.52 1.16-1.16 1.16-.64 0-1.16-.52-1.16-1.16 0-.64.52-1.16 1.16-1.16zm5.22 0c.64 0 1.16.52 1.16 1.16 0 .64-.52 1.16-1.16 1.16-.64 0-1.16-.52-1.16-1.16 0-.64.52-1.16 1.16-1.16zm5.88 4.67c-3.79 0-6.86 2.58-6.86 5.76 0 3.18 3.07 5.76 6.86 5.76.71 0 1.39-.1 2.04-.29.72.5 2.03 1.12 3.26 1.26-.6-1.02-.3-2.15-.19-2.75 1.54-1.03 2.53-2.64 2.53-4.46 0-3.18-3.07-5.76-6.86-5.76zm-2.06 3.12c.5 0 .91.41.91.91 0 .5-.41.91-.91.91s-.91-.41-.91-.91c0-.5.41-.91.91-.91zm4.12 0c.5 0 .91.41.91.91 0 .5-.41.91-.91.91s-.91-.41-.91-.91c0-.5.41-.91.91-.91z"/></svg>
+              <span>WeChat QR</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-modal-footer">
+        <button id="modalJumpTreeBtn" class="modal-action-btn primary-action">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><circle cx="12" cy="3" r="2"/><circle cx="12" cy="21" r="2"/><circle cx="3" cy="12" r="2"/><circle cx="21" cy="12" r="2"/><line x1="12" y1="5" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="19"/><line x1="5" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="19" y2="12"/></svg>
+          <span>View in Family Tree</span>
+        </button>
+        <button id="modalJumpPageBtn" class="modal-action-btn secondary-action">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <span>View Book Page 44</span>
+        </button>
+        <a href="zhufamily.apk" download="zhufamily.apk" class="modal-action-btn apk-action">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993.0001.5511-.4482.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 0 0-.1521-.5676.416.416 0 0 0-.5676.1521l-2.0223 3.503C15.5902 8.4126 13.8533 8.125 12 8.125c-1.8533 0-3.5902.2876-5.1368.8247L4.8409 5.4467a.4161.4161 0 0 0-.5677-.1521.4157.4157 0 0 0-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3432-4.1021-2.6889-7.5743-6.1185-9.4396"/></svg>
+          <span>Download Android APK</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact QR Code Modal (WeChat) -->
+  <div id="contactQrModal" class="modal-overlay">
+    <div class="qr-modal-container">
+      <div class="qr-modal-header">
+        <div class="qr-tab-nav">
+          <div class="qr-single-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8.691 2.188C3.891 2.188 0 5.478 0 9.53c0 2.31 1.26 4.36 3.22 5.67-.14.77-.52 2.21-1.28 3.19 1.57-.18 3.23-.97 4.15-1.61.83.24 1.7.38 2.6.38.29 0 .58-.02.86-.05-.27-.72-.42-1.5-.42-2.31 0-3.6 3.49-6.52 7.8-6.52.26 0 .52.02.77.05C17.06 5.84 13.18 2.188 8.691 2.188zm-2.61 3.96c.64 0 1.16.52 1.16 1.16 0 .64-.52 1.16-1.16 1.16-.64 0-1.16-.52-1.16-1.16 0-.64.52-1.16 1.16-1.16zm5.22 0c.64 0 1.16.52 1.16 1.16 0 .64-.52 1.16-1.16 1.16-.64 0-1.16-.52-1.16-1.16 0-.64.52-1.16 1.16-1.16zm5.88 4.67c-3.79 0-6.86 2.58-6.86 5.76 0 3.18 3.07 5.76 6.86 5.76.71 0 1.39-.1 2.04-.29.72.5 2.03 1.12 3.26 1.26-.6-1.02-.3-2.15-.19-2.75 1.54-1.03 2.53-2.64 2.53-4.46 0-3.18-3.07-5.76-6.86-5.76zm-2.06 3.12c.5 0 .91.41.91.91 0 .5-.41.91-.91.91s-.91-.41-.91-.91c0-.5.41-.91.91-.91zm4.12 0c.5 0 .91.41.91.91 0 .5-.41.91-.91.91s-.91-.41-.91-.91c0-.5.41-.91.91-.91z"/></svg>
+            <span>WeChat Contact (微信扫码添友)</span>
+          </div>
+        </div>
+        <button id="closeContactQrBtn" class="icon-btn close-modal-btn">&times;</button>
+      </div>
+
+      <div class="qr-modal-body">
+        <!-- WeChat Panel -->
+        <div id="qrPanelWechat" class="qr-panel-content active">
+          <div class="qr-platform-header wechat-theme">
+            <span class="qr-platform-tag">祝明灿 · drtiM (Kuala Lumpur, Malaysia)</span>
+            <p class="qr-platform-desc">Scan QR code in WeChat or add via WeChat ID:</p>
+          </div>
+          <div class="qr-image-wrapper">
+            <img id="wechatQrImg" src="images/wechat_qr.png" alt="WeChat QR Code" onerror="this.style.display='none'; document.getElementById('wechatFallback').style.display='flex';" />
+            <div id="wechatFallback" class="qr-fallback-card" style="display:none;">
+              <svg viewBox="0 0 120 120" width="180" height="180" class="qr-art-svg">
+                <rect width="120" height="120" fill="#ffffff" rx="10"/>
+                <!-- WeChat QR style finder patterns -->
+                <rect x="12" y="12" width="30" height="30" fill="#07c160" rx="4"/>
+                <rect x="17" y="17" width="20" height="20" fill="#ffffff" rx="2"/>
+                <rect x="22" y="22" width="10" height="10" fill="#07c160" rx="1"/>
+                
+                <rect x="78" y="12" width="30" height="30" fill="#07c160" rx="4"/>
+                <rect x="83" y="17" width="20" height="20" fill="#ffffff" rx="2"/>
+                <rect x="88" y="22" width="10" height="10" fill="#07c160" rx="1"/>
+                
+                <rect x="12" y="78" width="30" height="30" fill="#07c160" rx="4"/>
+                <rect x="17" y="83" width="20" height="20" fill="#ffffff" rx="2"/>
+                <rect x="22" y="88" width="10" height="10" fill="#07c160" rx="1"/>
+
+                <!-- Matrix pattern tiles -->
+                <rect x="48" y="14" width="7" height="7" fill="#0f172a"/>
+                <rect x="58" y="22" width="7" height="7" fill="#0f172a"/>
+                <rect x="48" y="30" width="7" height="7" fill="#0f172a"/>
+                <rect x="66" y="14" width="7" height="7" fill="#0f172a"/>
+                <rect x="14" y="48" width="7" height="7" fill="#0f172a"/>
+                <rect x="28" y="56" width="7" height="7" fill="#0f172a"/>
+                <rect x="48" y="48" width="24" height="24" fill="#07c160" rx="4"/>
+                <circle cx="60" cy="60" r="6" fill="#ffffff"/>
+                <rect x="78" y="48" width="7" height="7" fill="#0f172a"/>
+                <rect x="92" y="56" width="7" height="7" fill="#0f172a"/>
+                <rect x="100" y="78" width="7" height="7" fill="#0f172a"/>
+                <rect x="52" y="80" width="7" height="7" fill="#0f172a"/>
+                <rect x="68" y="88" width="7" height="7" fill="#0f172a"/>
+                <rect x="84" y="94" width="7" height="7" fill="#0f172a"/>
+              </svg>
+              <span class="qr-card-note">WeChat QR ready (place <code>wechat_qr.png</code> in <code>images/</code>)</span>
+            </div>
+          </div>
+          <div class="qr-id-copy-row">
+            <span class="qr-id-tag">微信号 / WeChat:</span>
+            <span id="wechatIdVal" class="qr-id-text">drtiM</span>
+            <button id="copyWechatIdBtn" class="copy-badge-btn" type="button">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span id="copyBtnText">Copy ID</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="data/book_data.js"></script>
+  <script src="data/family_tree_data.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

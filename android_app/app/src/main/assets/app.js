@@ -56,6 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
         sec.classList.toggle('active', sec.id === targetId);
       });
       guideView.scrollTop = 0;
+      if (targetId === 'guideTree' && typeof window.renderCurrentFamilyTree === 'function') {
+        window.renderCurrentFamilyTree();
+      }
     });
   });
 
@@ -124,7 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'guideTree', title: '2. Simplified Family Tree Chart' },
         { id: 'guidePeople', title: '3. Key Figures of the Clan' },
         { id: 'guidePoem', title: '4. Generational Naming Code (字辈)' },
-        { id: 'guideMandate', title: '5. The 20-Year Sacred Mandate' }
+        { id: 'guideMandate', title: '5. The 20-Year Sacred Mandate' },
+        { id: 'guideAboutMe', title: '6. About Me (Ts. Dr. 祝明灿 · 19th Generation)' }
       ];
       guideItems.forEach(g => {
         const item = document.createElement('div');
@@ -253,6 +257,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const isPagedMode = mode === 'scan' || mode === 'bilingual';
     prevBtn.style.display = isPagedMode ? 'flex' : 'none';
     nextBtn.style.display = isPagedMode ? 'flex' : 'none';
+
+    if (mode === 'guide') {
+      const activePill = document.querySelector('.guide-pill.active');
+      if (activePill && activePill.dataset.target === 'guideTree' && typeof window.renderCurrentFamilyTree === 'function') {
+        setTimeout(window.renderCurrentFamilyTree, 50);
+      }
+    }
   }
 
   modeTabs.forEach(tab => {
@@ -274,6 +285,107 @@ document.addEventListener('DOMContentLoaded', () => {
   tocOverlay.addEventListener('click', (e) => {
     if (e.target === tocOverlay) tocOverlay.classList.remove('open');
   });
+
+  // About Me Modal & Actions
+  const aboutMeBtn = document.getElementById('aboutMeBtn');
+  const aboutMeOverlay = document.getElementById('aboutMeOverlay');
+  const closeAboutMeBtn = document.getElementById('closeAboutMeBtn');
+  const aboutJumpTreeBtn = document.getElementById('aboutJumpTreeBtn');
+  const modalJumpTreeBtn = document.getElementById('modalJumpTreeBtn');
+  const aboutJumpPageBtn = document.getElementById('aboutJumpPageBtn');
+  const modalJumpPageBtn = document.getElementById('modalJumpPageBtn');
+
+  if (aboutMeBtn && aboutMeOverlay) {
+    aboutMeBtn.addEventListener('click', () => aboutMeOverlay.classList.add('open'));
+  }
+  if (closeAboutMeBtn && aboutMeOverlay) {
+    closeAboutMeBtn.addEventListener('click', () => aboutMeOverlay.classList.remove('open'));
+  }
+  if (aboutMeOverlay) {
+    aboutMeOverlay.addEventListener('click', (e) => {
+      if (e.target === aboutMeOverlay) aboutMeOverlay.classList.remove('open');
+    });
+  }
+
+  function handleJumpToMyTree() {
+    if (aboutMeOverlay) aboutMeOverlay.classList.remove('open');
+    switchMode('guide');
+    const pill = document.querySelector('.guide-pill[data-target="guideTree"]');
+    if (pill) pill.click();
+    const chip = document.getElementById('chipFocusMe');
+    if (chip) chip.click();
+  }
+
+  function handleJumpToMyPage() {
+    if (aboutMeOverlay) aboutMeOverlay.classList.remove('open');
+    switchMode('scan');
+    goToPage(44);
+  }
+
+  aboutJumpTreeBtn?.addEventListener('click', handleJumpToMyTree);
+  modalJumpTreeBtn?.addEventListener('click', handleJumpToMyTree);
+  aboutJumpPageBtn?.addEventListener('click', handleJumpToMyPage);
+  modalJumpPageBtn?.addEventListener('click', handleJumpToMyPage);
+
+  // ============================================================
+  // WeChat QR Code Modal Interactivity
+  // ============================================================
+  const contactQrModal = document.getElementById('contactQrModal');
+  const closeContactQrBtn = document.getElementById('closeContactQrBtn');
+  const copyWechatIdBtn = document.getElementById('copyWechatIdBtn');
+  const copyBtnText = document.getElementById('copyBtnText');
+  const viewQrBtns = document.querySelectorAll('.view-qr-btn');
+
+  function openContactQr() {
+    if (!contactQrModal) return;
+    contactQrModal.classList.add('open');
+  }
+
+  function closeContactQr() {
+    if (contactQrModal) contactQrModal.classList.remove('open');
+  }
+
+  viewQrBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openContactQr();
+    });
+  });
+
+  closeContactQrBtn?.addEventListener('click', closeContactQr);
+
+  if (contactQrModal) {
+    contactQrModal.addEventListener('click', (e) => {
+      if (e.target === contactQrModal) closeContactQr();
+    });
+  }
+
+  // Copy WeChat ID
+  if (copyWechatIdBtn) {
+    copyWechatIdBtn.addEventListener('click', async () => {
+      const wechatId = document.getElementById('wechatIdVal')?.textContent?.trim() || 'drtiM';
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(wechatId);
+        } else {
+          const tempInput = document.createElement('input');
+          tempInput.value = wechatId;
+          document.body.appendChild(tempInput);
+          tempInput.select();
+          document.execCommand('copy');
+          document.body.removeChild(tempInput);
+        }
+        copyWechatIdBtn.classList.add('copied');
+        if (copyBtnText) copyBtnText.textContent = 'Copied! ✓';
+        setTimeout(() => {
+          copyWechatIdBtn.classList.remove('copied');
+          if (copyBtnText) copyBtnText.textContent = 'Copy ID';
+        }, 2200);
+      } catch (err) {
+        console.warn('Clipboard copy failed:', err);
+      }
+    });
+  }
 
   drawerTabs.forEach(tab => {
     tab.addEventListener('click', () => {
@@ -1052,6 +1164,545 @@ document.addEventListener('DOMContentLoaded', () => {
   const clearTimer = setInterval(removeNetlifyBadge, 300);
   setTimeout(() => clearInterval(clearTimer), 10000);
 
+  // =============================================================
+  // INTERACTIVE SPOKES & HUB FAMILY TREE ENGINE
+  // =============================================================
+  function initFamilyTree() {
+    const treeData = window.FAMILY_TREE_DATA;
+    if (!treeData || !treeData.nodes) return;
+
+    let activeHubId = treeData.defaultHubId || "gen19_mingcan";
+    let currentTreeMode = "spokes"; // 'spokes' | 'hierarchy' | 'summary'
+    let currentBranchFilter = "all";
+    let zoomScale = 1.0;
+    let panOffset = { x: 0, y: 0 };
+    let isDragging = false;
+    let dragStart = { x: 0, y: 0 };
+
+    // Elements
+    const btnTreeSpokes = document.getElementById('btnTreeSpokes');
+    const btnTreeHierarchy = document.getElementById('btnTreeHierarchy');
+    const btnTreeSummary = document.getElementById('btnTreeSummary');
+
+    const treeSpokesView = document.getElementById('treeSpokesView');
+    const treeHierarchyView = document.getElementById('treeHierarchyView');
+    const treeSummaryView = document.getElementById('treeSummaryView');
+
+    const spokesWrapper = document.getElementById('spokesCanvasWrapper');
+    const hierarchyWrapper = document.getElementById('hierarchyTreeWrapper');
+
+    const treeSearchInput = document.getElementById('treeSearchInput');
+    const treeSearchClearBtn = document.getElementById('treeSearchClearBtn');
+    const treeBranchFilter = document.getElementById('treeBranchFilter');
+
+    const treeZoomInBtn = document.getElementById('treeZoomInBtn');
+    const treeZoomOutBtn = document.getElementById('treeZoomOutBtn');
+    const treeZoomResetBtn = document.getElementById('treeZoomResetBtn');
+
+    // Quick focus chips
+    const chipFocusMe = document.getElementById('chipFocusMe');
+    const chipFocusFather = document.getElementById('chipFocusFather');
+    const chipFocusFounder = document.getElementById('chipFocusFounder');
+    const chipFocusOverseas = document.getElementById('chipFocusOverseas');
+    const chipFocusRestored = document.getElementById('chipFocusRestored');
+    const quickChips = [chipFocusMe, chipFocusFather, chipFocusFounder, chipFocusOverseas, chipFocusRestored];
+
+    // Inspector elements
+    const inspectorName = document.getElementById('inspectorName');
+    const inspectorPinyin = document.getElementById('inspectorPinyin');
+    const inspectorGenBadge = document.getElementById('inspectorGenBadge');
+    const inspectorBookPageLabel = document.getElementById('inspectorBookPageLabel');
+    const inspectorBookBtn = document.getElementById('inspectorBookBtn');
+    const inspectorBreadcrumbs = document.getElementById('inspectorBreadcrumbs');
+    const inspectorFatherBox = document.getElementById('inspectorFatherBox');
+    const inspectorChildrenBox = document.getElementById('inspectorChildrenBox');
+    const inspectorBrothersBox = document.getElementById('inspectorBrothersBox');
+    const inspectorLocationBox = document.getElementById('inspectorLocationBox');
+    const inspectorNotesText = document.getElementById('inspectorNotesText');
+
+    function setActiveQuickChip(activeChip) {
+      quickChips.forEach(c => c && c.classList.remove('active'));
+      if (activeChip) activeChip.classList.add('active');
+    }
+
+    function switchTreeMode(mode) {
+      currentTreeMode = mode;
+      btnTreeSpokes?.classList.toggle('active', mode === 'spokes');
+      btnTreeHierarchy?.classList.toggle('active', mode === 'hierarchy');
+      btnTreeSummary?.classList.toggle('active', mode === 'summary');
+
+      treeSpokesView?.classList.toggle('active', mode === 'spokes');
+      treeHierarchyView?.classList.toggle('active', mode === 'hierarchy');
+      treeSummaryView?.classList.toggle('active', mode === 'summary');
+
+      renderCurrentView();
+    }
+
+    btnTreeSpokes?.addEventListener('click', () => switchTreeMode('spokes'));
+    btnTreeHierarchy?.addEventListener('click', () => switchTreeMode('hierarchy'));
+    btnTreeSummary?.addEventListener('click', () => switchTreeMode('summary'));
+
+    function setHub(nodeId, sourceChip = null) {
+      if (!treeData.getNodeById(nodeId)) return;
+      activeHubId = nodeId;
+      panOffset = { x: 0, y: 0 };
+      zoomScale = 1.0;
+      setActiveQuickChip(sourceChip);
+      renderCurrentView();
+      updateInspector(nodeId);
+    }
+
+    chipFocusMe?.addEventListener('click', () => setHub('gen19_mingcan', chipFocusMe));
+    chipFocusFather?.addEventListener('click', () => setHub('gen18_shengjin', chipFocusFather));
+    chipFocusFounder?.addEventListener('click', () => setHub('gen1_gao', chipFocusFounder));
+    chipFocusOverseas?.addEventListener('click', () => setHub('gen17_jiasong', chipFocusOverseas));
+    chipFocusRestored?.addEventListener('click', () => setHub('gen8_youyan', chipFocusRestored));
+
+    // Filter by branch
+    treeBranchFilter?.addEventListener('change', (e) => {
+      currentBranchFilter = e.target.value;
+      renderCurrentView();
+    });
+
+    // Zoom buttons
+    treeZoomInBtn?.addEventListener('click', () => {
+      zoomScale = Math.min(2.5, zoomScale + 0.2);
+      updateSpokesTransform();
+    });
+    treeZoomOutBtn?.addEventListener('click', () => {
+      zoomScale = Math.max(0.4, zoomScale - 0.2);
+      updateSpokesTransform();
+    });
+    treeZoomResetBtn?.addEventListener('click', () => {
+      zoomScale = 1.0;
+      panOffset = { x: 0, y: 0 };
+      updateSpokesTransform();
+    });
+
+    // Search
+    function handleTreeSearch() {
+      const q = (treeSearchInput.value || '').trim().toLowerCase();
+      if (treeSearchClearBtn) treeSearchClearBtn.style.display = q ? 'block' : 'none';
+      if (!q) return;
+
+      const match = treeData.nodes.find(n =>
+        n.name.toLowerCase().includes(q) ||
+        n.pinyin.toLowerCase().includes(q) ||
+        (n.location && n.location.toLowerCase().includes(q)) ||
+        (n.branch && n.branch.toLowerCase().includes(q)) ||
+        (n.notes && n.notes.toLowerCase().includes(q))
+      );
+
+      if (match) {
+        setHub(match.id);
+      }
+    }
+
+    treeSearchInput?.addEventListener('input', handleTreeSearch);
+    treeSearchClearBtn?.addEventListener('click', () => {
+      treeSearchInput.value = '';
+      treeSearchClearBtn.style.display = 'none';
+      setHub('gen19_mingcan', chipFocusMe);
+    });
+
+    // Pan interaction on Spokes wrapper
+    spokesWrapper?.addEventListener('mousedown', (e) => {
+      if (e.target.closest('.spoke-node-group')) return;
+      isDragging = true;
+      dragStart = { x: e.clientX - panOffset.x, y: e.clientY - panOffset.y };
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      panOffset.x = e.clientX - dragStart.x;
+      panOffset.y = e.clientY - dragStart.y;
+      updateSpokesTransform();
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    spokesWrapper?.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY < 0 ? 0.1 : -0.1;
+      zoomScale = Math.min(2.5, Math.max(0.4, zoomScale + delta));
+      updateSpokesTransform();
+    }, { passive: false });
+
+    // Touch pan
+    let touchStartCoord = { x: 0, y: 0 };
+    spokesWrapper?.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        touchStartCoord = { x: e.touches[0].clientX - panOffset.x, y: e.touches[0].clientY - panOffset.y };
+      }
+    }, { passive: true });
+
+    spokesWrapper?.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 1) {
+        panOffset.x = e.touches[0].clientX - touchStartCoord.x;
+        panOffset.y = e.touches[0].clientY - touchStartCoord.y;
+        updateSpokesTransform();
+      }
+    }, { passive: true });
+
+    function updateSpokesTransform() {
+      const g = spokesWrapper?.querySelector('.spokes-main-group');
+      if (g) {
+        const w = spokesWrapper.clientWidth || 800;
+        const h = spokesWrapper.clientHeight || 540;
+        g.setAttribute('transform', `translate(${w / 2 + panOffset.x}, ${h / 2 + panOffset.y}) scale(${zoomScale})`);
+      }
+    }
+
+    // =========================================================
+    // RENDER: Spokes & Hub View
+    // =========================================================
+    function renderSpokesHub() {
+      if (!spokesWrapper) return;
+      const hubNode = treeData.getNodeById(activeHubId);
+      if (!hubNode) return;
+
+      const w = spokesWrapper.clientWidth || 800;
+      const h = spokesWrapper.clientHeight || 540;
+
+      // Ancestors
+      const father = hubNode.fatherId ? treeData.getNodeById(hubNode.fatherId) : null;
+      const grandfather = father && father.fatherId ? treeData.getNodeById(father.fatherId) : null;
+
+      // Descendants & Peers
+      const children = treeData.getChildren(activeHubId);
+      const brothers = treeData.getBrothers(activeHubId);
+
+      // SVG structure
+      let svgHtml = `
+        <svg class="spokes-svg" viewBox="0 0 ${w} ${h}">
+          <defs>
+            <linearGradient id="hubGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#b91c1c" />
+              <stop offset="100%" stop-color="#7f1d1d" />
+            </linearGradient>
+            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#d97706" />
+              <stop offset="100%" stop-color="#b45309" />
+            </linearGradient>
+            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+          <g class="spokes-main-group" transform="translate(${w / 2 + panOffset.x}, ${h / 2 + panOffset.y}) scale(${zoomScale})">
+            <!-- Concentric Guide Rings -->
+            <circle class="spoke-orbit-ring" cx="0" cy="0" r="130" />
+            <circle class="spoke-orbit-ring" cx="0" cy="0" r="220" />
+      `;
+
+      // Draw Spokes (Lines)
+      // 1. Spoke to Father & Grandfather
+      if (father) {
+        svgHtml += `<line class="spoke-line father-spoke active-path" x1="0" y1="0" x2="0" y2="-130" />`;
+        if (grandfather) {
+          svgHtml += `<line class="spoke-line father-spoke active-path" x1="0" y1="-130" x2="0" y2="-220" />`;
+        }
+      }
+
+      // 2. Spokes to Brothers (Left & Right)
+      const numBrothers = brothers.length;
+      const brotherCoords = [];
+      if (numBrothers > 0) {
+        const brotherAngles = [-150, 150, -170, 170, -130, 130];
+        brothers.slice(0, 6).forEach((bro, i) => {
+          const angle = (brotherAngles[i % brotherAngles.length] * Math.PI) / 180;
+          const bx = Math.sin(angle) * 140;
+          const by = Math.cos(angle) * 140;
+          brotherCoords.push({ node: bro, x: bx, y: by });
+          svgHtml += `<line class="spoke-line peer-spoke" x1="0" y1="0" x2="${bx}" y2="${by}" />`;
+        });
+      }
+
+      // 3. Spokes to Children (Bottom arc)
+      const numChildren = children.length;
+      const childCoords = [];
+      if (numChildren > 0) {
+        const step = numChildren === 1 ? 0 : 80 / (numChildren - 1);
+        const startAngle = numChildren === 1 ? 0 : -40;
+        children.forEach((child, i) => {
+          const deg = startAngle + i * step;
+          const rad = (deg * Math.PI) / 180;
+          const cxPos = Math.sin(rad) * 155;
+          const cyPos = Math.cos(rad) * 155;
+          childCoords.push({ node: child, x: cxPos, y: cyPos });
+          svgHtml += `<line class="spoke-line son-spoke" x1="0" y1="0" x2="${cxPos}" y2="${cyPos}" />`;
+        });
+      }
+
+      // Render Nodes
+      // Grandfather Node
+      if (grandfather) {
+        svgHtml += `
+          <g class="spoke-node-group" transform="translate(0, -220)" data-node-id="${grandfather.id}">
+            <circle class="spoke-node-circle ancestor-circle" r="28" />
+            <text class="spoke-node-text-name" y="-2" font-size="11">${grandfather.name.split(' ')[0]}</text>
+            <text class="spoke-node-text-sub" y="12">${grandfather.gen}世 · 祖父</text>
+          </g>
+        `;
+      }
+
+      // Father Node
+      if (father) {
+        svgHtml += `
+          <g class="spoke-node-group" transform="translate(0, -130)" data-node-id="${father.id}">
+            <circle class="spoke-node-circle father-circle" r="36" />
+            <text class="spoke-node-text-name" y="-4" font-size="13">${father.name.split(' ')[0]}</text>
+            <text class="spoke-node-text-sub" y="12">${father.gen}世 · 父亲</text>
+          </g>
+        `;
+      }
+
+      // Brother Nodes
+      brotherCoords.forEach(b => {
+        svgHtml += `
+          <g class="spoke-node-group" transform="translate(${b.x}, ${b.y})" data-node-id="${b.node.id}">
+            <circle class="spoke-node-circle peer-circle" r="28" />
+            <text class="spoke-node-text-name" y="-2" font-size="11">${b.node.name.split(' ')[0]}</text>
+            <text class="spoke-node-text-sub" y="12">${b.node.genChar}字辈</text>
+          </g>
+        `;
+      });
+
+      // Children Nodes
+      childCoords.forEach(c => {
+        svgHtml += `
+          <g class="spoke-node-group" transform="translate(${c.x}, ${c.y})" data-node-id="${c.node.id}">
+            <circle class="spoke-node-circle son-circle" r="30" />
+            <text class="spoke-node-text-name" y="-3" font-size="12">${c.node.name.split(' ')[0]}</text>
+            <text class="spoke-node-text-sub" y="11">${c.node.gen}世 · 子</text>
+          </g>
+        `;
+      });
+
+      // CENTRAL HUB NODE
+      const isMe = hubNode.isCurrentUser;
+      const hubTitle = hubNode.name.split(' ')[0];
+      svgHtml += `
+        <!-- Hub pulse wave -->
+        <circle class="spoke-hub-pulse" cx="0" cy="0" r="50" fill="${isMe ? 'rgba(180, 83, 9, 0.25)' : 'rgba(153, 27, 27, 0.2)'}" />
+        <g class="spoke-node-group hub-group" transform="translate(0, 0)" data-node-id="${hubNode.id}">
+          <circle class="spoke-node-circle hub-circle" r="50" fill="url(#hubGrad)" />
+          <text class="spoke-node-text-name" y="-8" font-size="15" font-weight="800">${hubTitle}</text>
+          <text class="spoke-node-text-sub" y="8" font-size="10">${hubNode.gen > 0 ? `${hubNode.gen}世 · ${hubNode.genChar}字派` : hubNode.genName}</text>
+          <text class="spoke-node-text-sub" y="21" font-size="9" fill="#fef08a">${isMe ? '★ 当前焦点 ★' : '● 中心祖辈'}</text>
+        </g>
+      `;
+
+      svgHtml += `</g></svg>`;
+      spokesWrapper.innerHTML = svgHtml;
+
+      // Attach click events on nodes
+      spokesWrapper.querySelectorAll('.spoke-node-group').forEach(group => {
+        group.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const nid = group.dataset.nodeId;
+          if (nid && nid !== activeHubId) {
+            setHub(nid);
+          }
+        });
+      });
+    }
+
+    // =========================================================
+    // RENDER: Hierarchy Tree View
+    // =========================================================
+    function renderHierarchyTree() {
+      if (!hierarchyWrapper) return;
+      hierarchyWrapper.innerHTML = '';
+
+      // Group nodes by generation
+      const genGroups = new Map();
+      treeData.nodes.forEach(n => {
+        // Filter by branch if active
+        if (currentBranchFilter !== 'all') {
+          const b = (n.branch || '').toLowerCase();
+          if (currentBranchFilter === 'gaolong' && !b.includes('gaolong') && !b.includes('senior')) return;
+          if (currentBranchFilter === 'junior' && !b.includes('junior') && !b.includes('xinqiao')) return;
+          if (currentBranchFilter === 'overseas' && !b.includes('singapore') && !b.includes('malaysia') && !b.includes('nanyang')) return;
+          if (currentBranchFilter === 'restored' && !b.includes('82') && !b.includes('83') && !b.includes('restored')) return;
+        }
+
+        if (!genGroups.has(n.gen)) {
+          genGroups.set(n.gen, []);
+        }
+        genGroups.get(n.gen).push(n);
+      });
+
+      // Sort generations from ancient (-3) to 21
+      const sortedGens = Array.from(genGroups.keys()).sort((a, b) => a - b);
+      const activeAncestors = new Set(treeData.getAncestors(activeHubId).map(n => n.id));
+
+      sortedGens.forEach(gen => {
+        const nodes = genGroups.get(gen);
+        if (!nodes || nodes.length === 0) return;
+
+        const row = document.createElement('div');
+        row.className = 'hierarchy-gen-row';
+
+        const label = document.createElement('div');
+        label.className = 'hierarchy-gen-label';
+        if (gen < 1) {
+          label.textContent = gen === -3 ? '上古始祖' : gen === -2 ? '火正祝融' : gen === -1 ? '西周祝国' : '太原/万州';
+        } else {
+          label.textContent = `${gen}世 · ${nodes[0].genChar || ''}`;
+        }
+        row.appendChild(label);
+
+        const list = document.createElement('div');
+        list.className = 'hierarchy-nodes-list';
+
+        nodes.forEach(n => {
+          const card = document.createElement('div');
+          const isHub = n.id === activeHubId;
+          const inPath = activeAncestors.has(n.id);
+          card.className = `hierarchy-card ${isHub ? 'active-hub' : ''} ${inPath ? 'in-path' : ''}`;
+
+          card.innerHTML = `
+            <div class="hierarchy-card-name">${n.name.split(' ')[0]} ${n.isCurrentUser ? '★' : ''}</div>
+            <div class="hierarchy-card-branch">${n.branch}</div>
+          `;
+
+          card.addEventListener('click', () => {
+            setHub(n.id);
+          });
+          list.appendChild(card);
+        });
+
+        row.appendChild(list);
+        hierarchyWrapper.appendChild(row);
+      });
+    }
+
+    function renderCurrentView() {
+      if (currentTreeMode === 'spokes') {
+        renderSpokesHub();
+      } else if (currentTreeMode === 'hierarchy') {
+        renderHierarchyTree();
+      }
+    }
+
+    // =========================================================
+    // UPDATE: Inspector Drawer / Bottom Card
+    // =========================================================
+    function updateInspector(nodeId) {
+      const node = treeData.getNodeById(nodeId);
+      if (!node) return;
+
+      if (inspectorName) inspectorName.textContent = node.name;
+      if (inspectorPinyin) inspectorPinyin.textContent = node.pinyin || '';
+      if (inspectorGenBadge) inspectorGenBadge.textContent = node.genName || `${node.gen}世`;
+
+      if (inspectorBookPageLabel) inspectorBookPageLabel.textContent = `Book Page ${node.page || 22}`;
+      if (inspectorBookBtn) {
+        inspectorBookBtn.onclick = () => {
+          switchMode('scan');
+          goToPage(node.page || 22);
+        };
+      }
+
+      // Direct Paternal Lineage Breadcrumbs (始祖 ➔ Father ➔ Person)
+      if (inspectorBreadcrumbs) {
+        inspectorBreadcrumbs.innerHTML = '';
+        const path = treeData.getAncestors(nodeId);
+        path.forEach((ancestor, idx) => {
+          const chip = document.createElement('button');
+          chip.className = `path-node-chip ${ancestor.id === nodeId ? 'current-chip' : ''}`;
+          chip.textContent = ancestor.name.split(' ')[0];
+          chip.title = `${ancestor.genName} (Click to focus)`;
+          chip.addEventListener('click', () => setHub(ancestor.id));
+          inspectorBreadcrumbs.appendChild(chip);
+
+          if (idx < path.length - 1) {
+            const arrow = document.createElement('span');
+            arrow.className = 'path-arrow';
+            arrow.textContent = '➔';
+            inspectorBreadcrumbs.appendChild(arrow);
+          }
+        });
+      }
+
+      // Father
+      if (inspectorFatherBox) {
+        inspectorFatherBox.innerHTML = '';
+        if (node.fatherId) {
+          const f = treeData.getNodeById(node.fatherId);
+          if (f) {
+            const fChip = document.createElement('button');
+            fChip.className = 'tie-chip';
+            fChip.textContent = `${f.name.split(' ')[0]} (${f.gen}世)`;
+            fChip.addEventListener('click', () => setHub(f.id));
+            inspectorFatherBox.appendChild(fChip);
+          } else {
+            inspectorFatherBox.textContent = '始祖 (Root / No parent recorded)';
+          }
+        } else {
+          inspectorFatherBox.textContent = '始祖 (Root Ancestor)';
+        }
+      }
+
+      // Sons / Children
+      if (inspectorChildrenBox) {
+        inspectorChildrenBox.innerHTML = '';
+        const children = treeData.getChildren(nodeId);
+        if (children.length > 0) {
+          children.forEach(c => {
+            const cChip = document.createElement('button');
+            cChip.className = 'tie-chip';
+            cChip.textContent = `${c.name.split(' ')[0]} (${c.gen}世)`;
+            cChip.addEventListener('click', () => setHub(c.id));
+            inspectorChildrenBox.appendChild(cChip);
+          });
+        } else {
+          inspectorChildrenBox.textContent = '未记录子嗣 / 承前启后 (Successors pending)';
+        }
+      }
+
+      // Brothers / Generational Peers
+      if (inspectorBrothersBox) {
+        inspectorBrothersBox.innerHTML = '';
+        const brothers = treeData.getBrothers(nodeId);
+        if (brothers.length > 0) {
+          brothers.forEach(b => {
+            const bChip = document.createElement('button');
+            bChip.className = 'tie-chip';
+            bChip.textContent = b.name.split(' ')[0];
+            bChip.addEventListener('click', () => setHub(b.id));
+            inspectorBrothersBox.appendChild(bChip);
+          });
+        } else {
+          inspectorBrothersBox.textContent = '独子 / 该支唯一传人';
+        }
+      }
+
+      // Location & Branch
+      if (inspectorLocationBox) {
+        inspectorLocationBox.textContent = `${node.branch} · ${node.location || '文昌'}`;
+      }
+
+      // Notes
+      if (inspectorNotesText) {
+        inspectorNotesText.textContent = node.notes || '详见族谱世系图原文。';
+      }
+    }
+
+    // Expose render function
+    window.renderCurrentFamilyTree = renderCurrentView;
+
+    // Initial render
+    setHub(activeHubId, chipFocusMe);
+  }
+
+  // Initialize Family Tree Engine
+  initFamilyTree();
+
   // Initialize on Page 2 (Cover)
   goToPage(2);
 });
+
