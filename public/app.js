@@ -1681,6 +1681,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
+      // Spouse or Mother
+      const inspectorSpouseBoxWrap = document.getElementById('inspectorSpouseBoxWrap');
+      const inspectorSpouseBox = document.getElementById('inspectorSpouseBox');
+      const inspectorSpouseLabel = document.getElementById('inspectorSpouseLabel');
+      if (inspectorSpouseBoxWrap && inspectorSpouseBox) {
+        if (node.spouse) {
+          inspectorSpouseBoxWrap.style.display = 'block';
+          if (inspectorSpouseLabel) inspectorSpouseLabel.textContent = 'Spouse (配偶):';
+          inspectorSpouseBox.textContent = node.spouse;
+        } else if (node.mother) {
+          inspectorSpouseBoxWrap.style.display = 'block';
+          if (inspectorSpouseLabel) inspectorSpouseLabel.textContent = 'Mother (母亲):';
+          inspectorSpouseBox.textContent = node.mother;
+        } else {
+          inspectorSpouseBoxWrap.style.display = 'none';
+        }
+      }
+
       // Location & Branch
       if (inspectorLocationBox) {
         inspectorLocationBox.textContent = `${node.branch} · ${node.location || '文昌'}`;
