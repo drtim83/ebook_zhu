@@ -639,6 +639,140 @@ body {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
+/* Poem Big Picture Narrative Overview */
+.poem-overview-card {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.04), rgba(180, 83, 9, 0.05));
+  border: 1.5px solid var(--gold-color);
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 22px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+}
+
+.overview-header {
+  margin-bottom: 16px;
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 12px;
+}
+
+.overview-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  background: rgba(180, 83, 9, 0.1);
+  padding: 3px 8px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.overview-header h3 {
+  font-size: 1.22rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 6px 0;
+}
+
+.overview-subtitle {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.overview-purpose-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.overview-purpose-box {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.purpose-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.purpose-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.narrative-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.narrative-act {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--accent-color);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.narrative-act.highlight-act {
+  border-left: 4px solid var(--gold-color);
+  background: linear-gradient(to right, rgba(180, 83, 9, 0.06), var(--bg-primary));
+}
+
+.act-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.act-title {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+}
+
+.act-poem-chunk {
+  font-family: var(--font-serif, "Noto Serif SC", serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  letter-spacing: 1px;
+}
+
+.act-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.act-badge-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: var(--gold-color);
+  color: #fff;
+  padding: 2px 7px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-right: 6px;
+}
+
 .poem-card-header {
   display: flex;
   flex-direction: column;
