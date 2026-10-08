@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Ebook library: allow read and write for books and pages
+    match /books/{bookId} {
+      allow read, write: if true;
+    }
+    match /pages/{pageId} {
+      allow read, write: if true;
+    }
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}

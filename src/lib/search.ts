@@ -1,5 +1,5 @@
 import { getAllPages, listBooks } from "./db";
-import { getSupabase, isSupabaseConfigured } from "./supabase";
+import { getAllCloudData, isSupabaseConfigured } from "./supabase";
 import type { Book, BookPage } from "./types";
 
 export interface PageMatch {
@@ -127,61 +127,22 @@ export async function searchAllBooks(query: string): Promise<BookSearchResult[]>
   let allPages: BookPage[] = [...localPages];
 
   if (isSupabaseConfigured()) {
-    const supabase = getSupabase();
-    if (supabase) {
-      try {
-        const [{ data: cloudBooks }, { data: cloudPages }] = await Promise.all([
-          supabase.from("books").select("*"),
-          supabase.from("pages").select("*"),
-        ]);
-
-        if (cloudBooks) {
-          const mappedCloudBooks: Book[] = cloudBooks.map((row) => ({
-            id: row.id,
-            title: row.title,
-            createdAt: new Date(row.created_at).getTime(),
-            updatedAt: new Date(row.updated_at).getTime(),
-            coverUrl: row.cover_url || undefined,
-            pageCount: row.page_count,
-            ocrLanguage: row.ocr_language,
-            isCloud: true,
-          }));
-
-          // Avoid duplicating if an ID exists locally
-          const localIds = new Set(localBooks.map((b) => b.id));
-          for (const cb of mappedCloudBooks) {
-            if (!localIds.has(cb.id)) {
-              allBooks.push(cb);
-            }
-          }
+    try {
+      const { books: cloudBooks, pages: cloudPages } = await getAllCloudData();
+      const localIds = new Set(localBooks.map((b) => b.id));
+      for (const cb of cloudBooks) {
+        if (!localIds.has(cb.id)) {
+          allBooks.push(cb);
         }
-
-        if (cloudPages) {
-          const mappedCloudPages: BookPage[] = cloudPages.map((p) => ({
-            id: p.id,
-            bookId: p.book_id,
-            order: p.order_index,
-            detectedNumber: p.detected_number,
-            sourceFilename: p.source_filename,
-            sourceKind: "image",
-            imageUrl: p.image_url,
-            width: 800,
-            height: 1100,
-            ocrText: p.ocr_text || "",
-            ocrLanguage: p.ocr_language || "en",
-            translations: p.translations || {},
-          }));
-
-          const localPageIds = new Set(localPages.map((p) => p.id));
-          for (const cp of mappedCloudPages) {
-            if (!localPageIds.has(cp.id)) {
-              allPages.push(cp);
-            }
-          }
-        }
-      } catch (err) {
-        console.warn("Cloud search error:", err);
       }
+      const localPageIds = new Set(localPages.map((p) => p.id));
+      for (const cp of cloudPages) {
+        if (!localPageIds.has(cp.id)) {
+          allPages.push(cp);
+        }
+      }
+    } catch (err) {
+      console.warn("Cloud search error:", err);
     }
   }
 

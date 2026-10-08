@@ -1,35 +1,45 @@
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+/**
+ * Cloud backend implementation for Ebook using Firebase (Firestore & Storage).
+ * Maintained with compatibility exports for existing UI components.
+ */
+
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  writeBatch,
+} from "firebase/firestore";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+  listAll,
+} from "firebase/storage";
+import { db, storage, isFirebaseConfigured } from "./firebase";
 import type { Book, BookPage } from "./types";
 
-const SUPABASE_URL =
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://rnrvhdhyoqnnljygslgf.supabase.co";
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+export { isFirebaseConfigured, isFirebaseConfigured as isSupabaseConfigured };
 
-export const STORAGE_BUCKET = "ebook-assets";
-
-let clientInstance: SupabaseClient | null = null;
-
-/** Check if Supabase credentials are configured in environment variables. */
-export function isSupabaseConfigured(): boolean {
-  return Boolean(SUPABASE_ANON_KEY && SUPABASE_ANON_KEY.trim().length > 10);
+export function getSupabase() {
+  return isFirebaseConfigured() ? { firestore: db, storage } : null;
 }
 
-/** Get or initialize the Supabase client. */
-export function getSupabase(): SupabaseClient | null {
-  if (!isSupabaseConfigured()) {
-    return null;
-  }
-  if (!clientInstance) {
-    clientInstance = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: {
-        persistSession: false,
-      },
-    });
-  }
-  return clientInstance;
+export interface CloudUploadProgress {
+  stage: "cover" | "pages" | "database";
+  current: number;
+  total: number;
+  fileName?: string;
 }
 
-interface CloudBookRow {
+interface CloudBookDoc {
   id: string;
   title: string;
   page_count: number;
@@ -39,7 +49,7 @@ interface CloudBookRow {
   updated_at: string;
 }
 
-interface CloudPageRow {
+interface CloudPageDoc {
   id: string;
   book_id: string;
   order_index: number;
@@ -52,135 +62,114 @@ interface CloudPageRow {
   created_at: string;
 }
 
-/** List all books from Supabase Cloud library. */
+/** List all books from Cloud library. */
 export async function listCloudBooks(): Promise<Book[]> {
-  const supabase = getSupabase();
-  if (!supabase) return [];
+  if (!isFirebaseConfigured()) return [];
 
-  const { data, error } = await supabase
-    .from("books")
-    .select("*")
-    .order("updated_at", { ascending: false });
+  try {
+    const q = query(collection(db, "books"), orderBy("updated_at", "desc"));
+    const snap = await getDocs(q);
 
-  if (error) {
-    console.error("Error fetching books from Supabase:", error);
+    return snap.docs.map((d) => {
+      const data = d.data() as CloudBookDoc;
+      return {
+        id: data.id || d.id,
+        title: data.title,
+        createdAt: new Date(data.created_at || Date.now()).getTime(),
+        updatedAt: new Date(data.updated_at || Date.now()).getTime(),
+        coverUrl: data.cover_url || undefined,
+        pageCount: data.page_count,
+        ocrLanguage: data.ocr_language,
+        isCloud: true,
+      };
+    });
+  } catch (err) {
+    console.error("Error fetching books from Firestore:", err);
     return [];
   }
-
-  return (data as CloudBookRow[]).map((row) => ({
-    id: row.id,
-    title: row.title,
-    createdAt: new Date(row.created_at).getTime(),
-    updatedAt: new Date(row.updated_at).getTime(),
-    coverUrl: row.cover_url || undefined,
-    pageCount: row.page_count,
-    ocrLanguage: row.ocr_language,
-    isCloud: true,
-  }));
 }
 
-/** Get a single book and its pages from Supabase Cloud. */
+/** Get a single book and its pages from Cloud. */
 export async function getCloudBook(
   id: string
 ): Promise<{ book: Book; pages: BookPage[] } | null> {
-  const supabase = getSupabase();
-  if (!supabase) return null;
+  if (!isFirebaseConfigured()) return null;
 
-  const { data: bookData, error: bookError } = await supabase
-    .from("books")
-    .select("*")
-    .eq("id", id)
-    .single();
+  try {
+    const bookRef = doc(db, "books", id);
+    const bookSnap = await getDoc(bookRef);
 
-  if (bookError || !bookData) {
+    if (!bookSnap.exists()) return null;
+
+    const bookData = bookSnap.data() as CloudBookDoc;
+    const book: Book = {
+      id: bookData.id || bookSnap.id,
+      title: bookData.title,
+      createdAt: new Date(bookData.created_at || Date.now()).getTime(),
+      updatedAt: new Date(bookData.updated_at || Date.now()).getTime(),
+      coverUrl: bookData.cover_url || undefined,
+      pageCount: bookData.page_count,
+      ocrLanguage: bookData.ocr_language,
+      isCloud: true,
+    };
+
+    const pagesQ = query(
+      collection(db, "pages"),
+      where("book_id", "==", id)
+    );
+    const pagesSnap = await getDocs(pagesQ);
+
+    const pages: BookPage[] = pagesSnap.docs
+      .map((d) => {
+        const p = d.data() as CloudPageDoc;
+        return {
+          id: p.id || d.id,
+          bookId: p.book_id,
+          order: p.order_index,
+          detectedNumber: p.detected_number,
+          sourceFilename: p.source_filename,
+          sourceKind: "image" as const,
+          imageUrl: p.image_url,
+          width: 800,
+          height: 1100,
+          ocrText: p.ocr_text || "",
+          ocrLanguage: p.ocr_language || "en",
+          translations: p.translations || {},
+        };
+      })
+      .sort((a, b) => a.order - b.order);
+
+    return { book, pages };
+  } catch (err) {
+    console.error("Error loading cloud book:", err);
     return null;
   }
-
-  const { data: pagesData, error: pagesError } = await supabase
-    .from("pages")
-    .select("*")
-    .eq("book_id", id)
-    .order("order_index", { ascending: true });
-
-  if (pagesError || !pagesData) {
-    return null;
-  }
-
-  const bookRow = bookData as CloudBookRow;
-  const book: Book = {
-    id: bookRow.id,
-    title: bookRow.title,
-    createdAt: new Date(bookRow.created_at).getTime(),
-    updatedAt: new Date(bookRow.updated_at).getTime(),
-    coverUrl: bookRow.cover_url || undefined,
-    pageCount: bookRow.page_count,
-    ocrLanguage: bookRow.ocr_language,
-    isCloud: true,
-  };
-
-  const pages: BookPage[] = (pagesData as CloudPageRow[]).map((p) => ({
-    id: p.id,
-    bookId: p.book_id,
-    order: p.order_index,
-    detectedNumber: p.detected_number,
-    sourceFilename: p.source_filename,
-    sourceKind: "image",
-    imageUrl: p.image_url,
-    width: 800,
-    height: 1100,
-    ocrText: p.ocr_text || "",
-    ocrLanguage: p.ocr_language || "en",
-    translations: p.translations || {},
-  }));
-
-  return { book, pages };
 }
 
-export interface CloudUploadProgress {
-  stage: "cover" | "pages" | "database";
-  current: number;
-  total: number;
-  fileName?: string;
-}
-
-/** Save a complete book and all page assets into Supabase Storage & Database. */
+/** Save a complete book and all page assets into Firebase Storage & Firestore. */
 export async function saveCloudBook(
   book: Book,
   pages: BookPage[],
   onProgress?: (progress: CloudUploadProgress) => void
 ): Promise<void> {
-  const supabase = getSupabase();
-  if (!supabase) {
-    throw new Error(
-      "Supabase credentials not configured. Add NEXT_PUBLIC_SUPABASE_ANON_KEY to your environment variables."
-    );
+  if (!isFirebaseConfigured()) {
+    throw new Error("Firebase credentials not configured.");
   }
 
   let coverUrl: string | undefined = book.coverUrl;
 
-  // 1. Upload Cover Image to Storage
+  // 1. Upload Cover Image to Firebase Storage
   if (book.coverImage && !coverUrl) {
     onProgress?.({ stage: "cover", current: 0, total: 1, fileName: "cover.jpg" });
-    const coverPath = `covers/${book.id}.jpg`;
-    const { error: coverErr } = await supabase.storage
-      .from(STORAGE_BUCKET)
-      .upload(coverPath, book.coverImage, {
-        contentType: book.coverImage.type || "image/jpeg",
-        upsert: true,
-      });
-
-    if (coverErr) {
-      console.warn("Could not upload cover image:", coverErr.message);
-    } else {
-      const { data: publicUrlData } = supabase.storage
-        .from(STORAGE_BUCKET)
-        .getPublicUrl(coverPath);
-      coverUrl = publicUrlData.publicUrl;
-    }
+    const coverStorageRef = ref(storage, `covers/${book.id}.jpg`);
+    await uploadBytes(coverStorageRef, book.coverImage, {
+      contentType: book.coverImage.type || "image/jpeg",
+    });
+    coverUrl = await getDownloadURL(coverStorageRef);
   }
 
   // 2. Upload Page Images
-  const pageRows: CloudPageRow[] = [];
+  const pageRows: CloudPageDoc[] = [];
   const totalPages = pages.length;
 
   for (let i = 0; i < pages.length; i++) {
@@ -195,24 +184,11 @@ export async function saveCloudBook(
     });
 
     if (!imageUrl && page.image) {
-      const pagePath = `pages/${book.id}/${page.id}.jpg`;
-      const { error: uploadErr } = await supabase.storage
-        .from(STORAGE_BUCKET)
-        .upload(pagePath, page.image, {
-          contentType: page.image.type || "image/jpeg",
-          upsert: true,
-        });
-
-      if (uploadErr) {
-        throw new Error(
-          `Failed to upload page ${i + 1} (${page.sourceFilename}): ${uploadErr.message}`
-        );
-      }
-
-      const { data: publicUrlData } = supabase.storage
-        .from(STORAGE_BUCKET)
-        .getPublicUrl(pagePath);
-      imageUrl = publicUrlData.publicUrl;
+      const pageStorageRef = ref(storage, `pages/${book.id}/${page.id}.jpg`);
+      await uploadBytes(pageStorageRef, page.image, {
+        contentType: page.image.type || "image/jpeg",
+      });
+      imageUrl = await getDownloadURL(pageStorageRef);
     }
 
     if (!imageUrl) {
@@ -229,75 +205,131 @@ export async function saveCloudBook(
       ocr_text: page.ocrText || "",
       ocr_language: page.ocrLanguage || book.ocrLanguage,
       translations: page.translations || {},
-      created_at: new Date(book.createdAt).toISOString(),
+      created_at: new Date(book.createdAt || Date.now()).toISOString(),
     });
   }
 
-  // 3. Upsert Book Row
+  // 3. Upsert Book Doc in Firestore
   onProgress?.({ stage: "database", current: 1, total: 2 });
-  const { error: bookUpsertErr } = await supabase.from("books").upsert({
-    id: book.id,
-    title: book.title,
-    page_count: pages.length,
-    ocr_language: book.ocrLanguage,
-    cover_url: coverUrl || pageRows[0]?.image_url || null,
-    updated_at: new Date().toISOString(),
-  });
+  const bookRef = doc(db, "books", book.id);
+  await setDoc(
+    bookRef,
+    {
+      id: book.id,
+      title: book.title,
+      page_count: pages.length,
+      ocr_language: book.ocrLanguage,
+      cover_url: coverUrl || pageRows[0]?.image_url || null,
+      created_at: new Date(book.createdAt || Date.now()).toISOString(),
+      updated_at: new Date().toISOString(),
+    },
+    { merge: true }
+  );
 
-  if (bookUpsertErr) {
-    throw new Error(`Failed to save book to database: ${bookUpsertErr.message}`);
-  }
-
-  // 4. Upsert Pages Rows
+  // 4. Upsert Pages in Firestore in Batches
   onProgress?.({ stage: "database", current: 2, total: 2 });
-  const { error: pagesUpsertErr } = await supabase.from("pages").upsert(pageRows);
-  if (pagesUpsertErr) {
-    throw new Error(`Failed to save book pages to database: ${pagesUpsertErr.message}`);
+  const BATCH_SIZE = 450;
+  for (let i = 0; i < pageRows.length; i += BATCH_SIZE) {
+    const chunk = pageRows.slice(i, i + BATCH_SIZE);
+    const batch = writeBatch(db);
+    for (const pageRow of chunk) {
+      const pageRef = doc(db, "pages", pageRow.id);
+      batch.set(pageRef, pageRow, { merge: true });
+    }
+    await batch.commit();
   }
 }
 
-/** Delete a book and its pages from Supabase Cloud. */
+/** Delete a book and its pages from Firebase. */
 export async function deleteCloudBook(id: string): Promise<void> {
-  const supabase = getSupabase();
-  if (!supabase) return;
+  if (!isFirebaseConfigured()) return;
 
-  // 1. Delete rows from database (cascades to pages if configured with cascade)
-  await supabase.from("pages").delete().eq("book_id", id);
-  await supabase.from("books").delete().eq("id", id);
+  // 1. Delete page docs from Firestore
+  const pagesQ = query(collection(db, "pages"), where("book_id", "==", id));
+  const pagesSnap = await getDocs(pagesQ);
+  if (!pagesSnap.empty) {
+    const batch = writeBatch(db);
+    pagesSnap.docs.forEach((d) => batch.delete(d.ref));
+    await batch.commit();
+  }
 
-  // 2. Best-effort storage cleanup
+  // 2. Delete book doc from Firestore
+  await deleteDoc(doc(db, "books", id));
+
+  // 3. Cleanup storage files
   try {
-    const { data: pageFiles } = await supabase.storage
-      .from(STORAGE_BUCKET)
-      .list(`pages/${id}`);
-    if (pageFiles && pageFiles.length > 0) {
-      await supabase.storage
-        .from(STORAGE_BUCKET)
-        .remove(pageFiles.map((f) => `pages/${id}/${f.name}`));
+    const coverRef = ref(storage, `covers/${id}.jpg`);
+    await deleteObject(coverRef).catch(() => {});
+
+    const pagesFolderRef = ref(storage, `pages/${id}`);
+    const filesList = await listAll(pagesFolderRef).catch(() => null);
+    if (filesList) {
+      await Promise.all(filesList.items.map((item) => deleteObject(item).catch(() => {})));
     }
-    await supabase.storage.from(STORAGE_BUCKET).remove([`covers/${id}.jpg`]);
   } catch (err) {
     console.warn("Storage cleanup failed:", err);
   }
 }
 
-/** Update translation for a specific page in Supabase. */
+/** Update translation for a specific page in Firestore. */
 export async function setCloudPageTranslation(
   pageId: string,
   lang: string,
   text: string
 ): Promise<void> {
-  const supabase = getSupabase();
-  if (!supabase) return;
+  if (!isFirebaseConfigured()) return;
 
-  const { data: pageData } = await supabase
-    .from("pages")
-    .select("translations")
-    .eq("id", pageId)
-    .single();
+  const pageRef = doc(db, "pages", pageId);
+  await updateDoc(pageRef, {
+    [`translations.${lang}`]: text,
+  });
+}
 
-  const existing = (pageData?.translations as Record<string, string>) || {};
-  const updated = { ...existing, [lang]: text };
+/** Helper for unified search across all cloud books and pages. */
+export async function getAllCloudData(): Promise<{ books: Book[]; pages: BookPage[] }> {
+  if (!isFirebaseConfigured()) return { books: [], pages: [] };
 
-  await supabase.from("pages").update({ translations: updated }).eq("id", pageId);
+  try {
+    const [booksSnap, pagesSnap] = await Promise.all([
+      getDocs(collection(db, "books")),
+      getDocs(collection(db, "pages")),
+    ]);
+
+    const books: Book[] = booksSnap.docs.map((d) => {
+      const data = d.data() as CloudBookDoc;
+      return {
+        id: data.id || d.id,
+        title: data.title,
+        createdAt: new Date(data.created_at || Date.now()).getTime(),
+        updatedAt: new Date(data.updated_at || Date.now()).getTime(),
+        coverUrl: data.cover_url || undefined,
+        pageCount: data.page_count,
+        ocrLanguage: data.ocr_language,
+        isCloud: true,
+      };
+    });
+
+    const pages: BookPage[] = pagesSnap.docs.map((d) => {
+      const p = d.data() as CloudPageDoc;
+      return {
+        id: p.id || d.id,
+        bookId: p.book_id,
+        order: p.order_index,
+        detectedNumber: p.detected_number,
+        sourceFilename: p.source_filename,
+        sourceKind: "image" as const,
+        imageUrl: p.image_url,
+        width: 800,
+        height: 1100,
+        ocrText: p.ocr_text || "",
+        ocrLanguage: p.ocr_language || "en",
+        translations: p.translations || {},
+      };
+    });
+
+    return { books, pages };
+  } catch (err) {
+    console.error("Error loading cloud data for search:", err);
+    return { books: [], pages: [] };
+  }
 }
