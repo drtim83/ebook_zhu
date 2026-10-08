@@ -11,10 +11,9 @@ import LibrarySearch from "@/components/LibrarySearch";
 export default function LibraryPage() {
   const [books, setBooks] = useState<Book[] | null>(null);
   const [activeFilter, setActiveFilter] = useState<"all" | "cloud" | "local">("all");
-  const [hasCloudConfig, setHasCloudConfig] = useState(false);
+  const [hasCloudConfig] = useState(() => isSupabaseConfigured());
 
   useEffect(() => {
-    setHasCloudConfig(isSupabaseConfigured());
 
     async function loadAll() {
       try {

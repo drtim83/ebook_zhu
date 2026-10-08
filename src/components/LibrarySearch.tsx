@@ -11,13 +11,11 @@ export default function LibrarySearch() {
 
   useEffect(() => {
     if (!query.trim()) {
-      setResults([]);
-      setSearching(false);
       return;
     }
 
-    setSearching(true);
     const timer = setTimeout(async () => {
+      setSearching(true);
       const res = await searchAllBooks(query);
       setResults(res);
       setSearching(false);
@@ -25,6 +23,8 @@ export default function LibrarySearch() {
 
     return () => clearTimeout(timer);
   }, [query]);
+
+  const displayResults = query.trim() ? results : [];
 
   function highlightMatch(text: string, term: string) {
     if (!term.trim()) return text;
@@ -74,18 +74,18 @@ export default function LibrarySearch() {
             <span>
               {searching
                 ? "Searching…"
-                : `${results.length} book${results.length === 1 ? "" : "s"} found`}
+                : `${displayResults.length} book${displayResults.length === 1 ? "" : "s"} found`}
             </span>
             {query && <span>Query: &quot;{query}&quot;</span>}
           </div>
 
-          {!searching && results.length === 0 && (
+          {!searching && displayResults.length === 0 && (
             <p className="py-6 text-center text-sm text-neutral-400">
               No matching text or books found for &quot;{query}&quot;.
             </p>
           )}
 
-          {results.map(({ book, matches, titleMatched }) => (
+          {displayResults.map(({ book, matches, titleMatched }) => (
             <div
               key={book.id}
               className="flex flex-col gap-2 rounded-xl border border-black/10 bg-white p-4 shadow-xs dark:border-white/10 dark:bg-neutral-900"

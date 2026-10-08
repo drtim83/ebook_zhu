@@ -12,8 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // Vendored, minified pdf.js worker copied into public/ by postinstall.
-    "public/pdf.worker.min.mjs",
+    "public/**",
+    "wifi-hacker/**",
+    "android_app/**",
+    "ebook_output/**",
   ]),
 ]);
 

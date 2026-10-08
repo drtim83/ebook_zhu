@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import type { BookPage } from "@/lib/types";
-import { searchBookPages, type PageMatch } from "@/lib/search";
+import { searchBookPages } from "@/lib/search";
 
 interface ReaderSearchModalProps {
   pages: BookPage[];
@@ -12,7 +12,10 @@ interface ReaderSearchModalProps {
 export default function ReaderSearchModal({ pages, onSelectPage }: ReaderSearchModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<PageMatch[]>([]);
+  const results = useMemo(() => {
+    if (!query.trim()) return [];
+    return searchBookPages(pages, query);
+  }, [pages, query]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -34,13 +37,7 @@ export default function ReaderSearchModal({ pages, onSelectPage }: ReaderSearchM
     }
   }, [isOpen]);
 
-  useEffect(() => {
-    if (!query.trim()) {
-      setResults([]);
-      return;
-    }
-    setResults(searchBookPages(pages, query));
-  }, [pages, query]);
+
 
   function highlightMatch(text: string, term: string) {
     if (!term.trim()) return text;

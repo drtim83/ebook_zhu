@@ -32,8 +32,8 @@ export async function flattenImage(
 
   try {
     const bitmap = await createImageBitmap(imageBlob);
-    let origW = bitmap.width;
-    let origH = bitmap.height;
+    const origW = bitmap.width;
+    const origH = bitmap.height;
 
     // 1. Initial Canvas setup
     let canvas = document.createElement("canvas");

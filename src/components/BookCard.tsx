@@ -5,18 +5,16 @@ import Link from "next/link";
 import type { Book } from "@/lib/types";
 
 export default function BookCard({ book }: { book: Book }) {
-  const [coverUrl, setCoverUrl] = useState<string | null>(book.coverUrl || null);
+  const [blobUrl, setBlobUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    if (book.coverUrl) {
-      setCoverUrl(book.coverUrl);
-      return;
-    }
-    if (!book.coverImage) return;
+    if (book.coverUrl || !book.coverImage) return;
     const url = URL.createObjectURL(book.coverImage);
-    queueMicrotask(() => setCoverUrl(url));
+    queueMicrotask(() => setBlobUrl(url));
     return () => URL.revokeObjectURL(url);
   }, [book.coverImage, book.coverUrl]);
+
+  const coverUrl = book.coverUrl || blobUrl;
 
   return (
     <Link

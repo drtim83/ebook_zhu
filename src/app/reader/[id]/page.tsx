@@ -125,10 +125,11 @@ export default function ReaderPage() {
       if (pageParam !== null) {
         const idx = parseInt(pageParam, 10);
         if (!isNaN(idx) && idx >= 0 && idx < pages.length) {
-          jumpToPage(idx);
+          queueMicrotask(() => jumpToPage(idx));
         }
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, pages.length, searchParams]);
 
   async function handleTranslated(lang: string, text: string) {

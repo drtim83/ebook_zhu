@@ -123,8 +123,8 @@ export async function searchAllBooks(query: string): Promise<BookSearchResult[]>
     getAllPages().catch(() => []),
   ]);
 
-  let allBooks: Book[] = [...localBooks];
-  let allPages: BookPage[] = [...localPages];
+  const allBooks: Book[] = [...localBooks];
+  const allPages: BookPage[] = [...localPages];
 
   if (isSupabaseConfigured()) {
     try {
