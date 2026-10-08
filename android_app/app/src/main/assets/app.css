@@ -1976,6 +1976,11 @@ iframe[title*="Netlify"] {
   stroke: #6ee7b7;
 }
 
+.spoke-node-circle.daughter-circle {
+  fill: #047857;
+  stroke: #6ee7b7;
+}
+
 .spoke-node-circle.peer-circle {
   fill: #1d4ed8;
   stroke: #93c5fd;

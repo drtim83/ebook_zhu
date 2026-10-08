@@ -1472,11 +1472,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Children Nodes
       childCoords.forEach(c => {
+        const isDaughter = c.node.gender === 'female' || c.node.relation === '女';
+        const relLabel = isDaughter ? '女' : '子';
+        const circleClass = isDaughter ? 'daughter-circle' : 'son-circle';
         svgHtml += `
           <g class="spoke-node-group" transform="translate(${c.x}, ${c.y})" data-node-id="${c.node.id}">
-            <circle class="spoke-node-circle son-circle" r="30" />
+            <circle class="spoke-node-circle ${circleClass}" r="30" />
             <text class="spoke-node-text-name" y="-3" font-size="12">${c.node.name.split(' ')[0]}</text>
-            <text class="spoke-node-text-sub" y="11">${c.node.gen}世 · 子</text>
+            <text class="spoke-node-text-sub" y="11">${c.node.gen}世 · ${relLabel}</text>
           </g>
         `;
       });
@@ -1655,7 +1658,9 @@ document.addEventListener('DOMContentLoaded', () => {
           children.forEach(c => {
             const cChip = document.createElement('button');
             cChip.className = 'tie-chip';
-            cChip.textContent = `${c.name.split(' ')[0]} (${c.gen}世)`;
+            const isDaughter = c.gender === 'female' || c.relation === '女';
+            const relText = isDaughter ? '女' : '子';
+            cChip.textContent = `${c.name.split(' ')[0]} (${c.gen}世 · ${relText})`;
             cChip.addEventListener('click', () => setHub(c.id));
             inspectorChildrenBox.appendChild(cChip);
           });
