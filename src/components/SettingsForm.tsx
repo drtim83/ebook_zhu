@@ -177,20 +177,20 @@ export default function SettingsForm() {
         </p>
         <div className="flex flex-col gap-2 rounded-lg bg-black/[0.02] p-3 text-xs dark:bg-white/[0.03]">
           <div className="flex justify-between">
-            <span className="text-neutral-500">Project:</span>
-            <span className="font-mono font-medium">Ebook_Zhu (rnrvhdhyoqnnljygslgf)</span>
+            <span className="text-neutral-500">Cloud Provider:</span>
+            <span className="font-mono font-medium">Google Firebase (Firestore)</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-neutral-500">Netlify Team:</span>
-            <span className="font-mono font-medium">6a3635ec0e7ad839a8d809e8</span>
+            <span className="text-neutral-500">Firebase Project:</span>
+            <span className="font-mono font-medium">ebookzhu</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-neutral-500">Storage Bucket:</span>
-            <span className="font-mono font-medium">ebook-assets (Public CDN)</span>
+            <span className="text-neutral-500">Asset Storage:</span>
+            <span className="font-mono font-medium">Public CDN (/books)</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-neutral-500">Supabase URL:</span>
-            <span className="font-mono font-medium">https://rnrvhdhyoqnnljygslgf.supabase.co</span>
+            <span className="text-neutral-500">Auth Domain:</span>
+            <span className="font-mono font-medium">ebookzhu.firebaseapp.com</span>
           </div>
         </div>
 
