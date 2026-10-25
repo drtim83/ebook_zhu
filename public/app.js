@@ -171,30 +171,29 @@ document.addEventListener('DOMContentLoaded', () => {
     currentPageNum.textContent = currentPage;
     pageSlider.value = currentPage;
 
-    const SUPABASE_CDN_PREFIX = "https://rnrvhdhyoqnnljygslgf.supabase.co/storage/v1/object/public/ebook-assets/";
     const pageObj = data.pages[currentPage - 1];
     if (pageObj) {
       const isFile = window.location.protocol === 'file:';
       const cleanImg = pageObj.image.replace(/^pages\//, '');
-      const localPath = "pages/" + cleanImg;
-      const cdnPath = SUPABASE_CDN_PREFIX + "pages/" + cleanImg;
 
-      const primaryUrl = isFile ? localPath : cdnPath;
-      const fallbackUrl = isFile ? cdnPath : localPath;
+      // Web/Cloud reader serves from books/zhu-family-lineage/, local APK from pages/
+      const candidates = isFile
+        ? ["pages/" + cleanImg, "books/zhu-family-lineage/" + cleanImg]
+        : ["books/zhu-family-lineage/" + cleanImg, "pages/" + cleanImg];
 
-      pageImage.onerror = function() {
-        if (this.src !== fallbackUrl && !this.src.endsWith(fallbackUrl)) {
-          this.src = fallbackUrl;
-        }
-      };
-      bilingualImage.onerror = function() {
-        if (this.src !== fallbackUrl && !this.src.endsWith(fallbackUrl)) {
-          this.src = fallbackUrl;
-        }
-      };
+      function loadImageWithFallback(imgElem) {
+        let attempt = 0;
+        imgElem.onerror = function() {
+          attempt++;
+          if (attempt < candidates.length) {
+            this.src = candidates[attempt];
+          }
+        };
+        imgElem.src = candidates[0];
+      }
 
-      pageImage.src = primaryUrl;
-      bilingualImage.src = primaryUrl;
+      loadImageWithFallback(pageImage);
+      loadImageWithFallback(bilingualImage);
       bilingualChinese.textContent = pageObj.chineseText || '（本页为图表或无文字）';
       bilingualEnglish.textContent = getRelevantEnglish(currentPage);
       bilingualBadge.textContent = currentPage === 1 ? 'Physical Book' : currentPage === 2 ? 'Book Cover' : `Page ${currentPage} / ${data.totalPages || 96}`;
