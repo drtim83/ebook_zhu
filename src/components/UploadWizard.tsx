@@ -11,7 +11,7 @@ import { runOCR, terminateOCR } from "@/lib/ocr";
 import { geminiOCR, GeminiError } from "@/lib/gemini";
 import { getSettings } from "@/lib/settings";
 import { saveBook } from "@/lib/db";
-import { saveCloudBook, isSupabaseConfigured, type CloudUploadProgress } from "@/lib/supabase";
+import { saveCloudBook, isFirebaseConfigured, type CloudUploadProgress } from "@/lib/cloudLibrary";
 import type { Book, BookPage } from "@/lib/types";
 import { importDriveFolder, type DriveImportProgress } from "@/lib/googleDrive";
 import { isUserAdmin } from "@/lib/auth";
@@ -59,7 +59,7 @@ export default function UploadWizard() {
       const s = getSettings();
       setOcrEngine(s.ocrEngine);
       setHasApiKey(Boolean(s.geminiApiKey.trim()));
-      const cloudAvailable = isSupabaseConfigured();
+      const cloudAvailable = isFirebaseConfigured();
       setHasCloud(cloudAvailable);
       if (!cloudAvailable) {
         setStorageTarget("local");
@@ -368,7 +368,7 @@ export default function UploadWizard() {
                       ? "bg-blue-600 text-white shadow-xs"
                       : "text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200"
                   } ${!hasCloud ? "opacity-40 cursor-not-allowed" : ""}`}
-                  title={!hasCloud ? "Add NEXT_PUBLIC_SUPABASE_ANON_KEY to enable cloud publishing" : "Publish to Supabase Cloud for all readers without login"}
+                  title={!hasCloud ? "Add NEXT_PUBLIC_FIREBASE_* env vars to enable cloud publishing" : "Publish to Firebase Cloud for all readers without login"}
                 >
                   <span>☁️ Cloud Public</span>
                 </button>
@@ -391,7 +391,7 @@ export default function UploadWizard() {
               <span className="text-blue-600 dark:text-blue-400 font-medium">
                 {cloudProgress.stage === "cover" && "Uploading cover…"}
                 {cloudProgress.stage === "pages" && `Uploading page ${cloudProgress.current}/${cloudProgress.total}…`}
-                {cloudProgress.stage === "database" && "Saving book index to Supabase…"}
+                {cloudProgress.stage === "database" && "Saving book index to Cloud Firestore…"}
               </span>
             )}
           </div>

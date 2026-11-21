@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { deleteBook, getBook, getBookPages, setPageTranslation } from "@/lib/db";
-import { getCloudBook, deleteCloudBook, setCloudPageTranslation } from "@/lib/supabase";
+import { getCloudBook, deleteCloudBook, setCloudPageTranslation } from "@/lib/cloudLibrary";
 import { getLanguage } from "@/lib/languages";
 import type { Book, BookPage } from "@/lib/types";
 import PageFlipReader from "@/components/PageFlipReader";

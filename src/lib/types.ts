@@ -14,7 +14,7 @@ export interface BookPage {
   sourceKind: SourceKind;
   /** The page image, stored as-is in IndexedDB, or loaded as Blob on demand. */
   image?: Blob;
-  /** Public CDN URL if stored in Supabase Cloud Storage. */
+  /** Public CDN URL if stored in Firebase Cloud Storage. */
   imageUrl?: string;
   width: number;
   height: number;
@@ -38,7 +38,7 @@ export interface Book {
   pageCount: number;
   /** Language the book was OCR'd with, as one of LANGUAGES' codes (e.g. "en"). */
   ocrLanguage: string;
-  /** Whether the book is stored in Supabase Cloud. */
+  /** Whether the book is stored in Firebase Cloud. */
   isCloud?: boolean;
 }
 
