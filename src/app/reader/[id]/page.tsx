@@ -137,7 +137,9 @@ export default function ReaderPage() {
     if (!current) return;
 
     if (book?.isCloud) {
-      await setCloudPageTranslation(current.id, lang, text);
+      if (isUserAdmin()) {
+        await setCloudPageTranslation(current.id, lang, text);
+      }
     } else {
       await setPageTranslation(current.id, lang, text);
     }
@@ -332,8 +334,8 @@ export default function ReaderPage() {
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
         onSuccess={executeDelete}
-        title="Admin Verification"
-        description="Enter the admin passcode to delete books from the public cloud library."
+        title="Admin Sign-In"
+        description="Sign in with your Firebase admin account to delete books from the public cloud library."
       />
     </div>
   );
