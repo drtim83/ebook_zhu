@@ -8,7 +8,17 @@ import {
   saveSettings,
   type AppSettings,
 } from "@/lib/settings";
-import { isUserAdmin, verifyAdminPasscode, lockAdmin } from "@/lib/auth";
+import {
+  ADMIN_EMAIL,
+  isAuthorizedAdmin,
+  isSignedInAdminUnverified,
+  isUserAdmin,
+  lockAdmin,
+  refreshAdminVerification,
+  sendAdminVerificationEmail,
+  signInAdmin,
+  subscribeToAuth,
+} from "@/lib/auth";
 
 export default function SettingsForm() {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
@@ -16,8 +26,13 @@ export default function SettingsForm() {
   const [saved, setSaved] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [adminInput, setAdminInput] = useState("");
-  const [adminError, setAdminError] = useState(false);
+  const [needsVerification, setNeedsVerification] = useState(false);
+  const [signedInEmail, setSignedInEmail] = useState<string | null>(null);
+  const [adminEmail, setAdminEmail] = useState(ADMIN_EMAIL);
+  const [adminPassword, setAdminPassword] = useState("");
+  const [adminLoading, setAdminLoading] = useState(false);
+  const [adminError, setAdminError] = useState<string | null>(null);
+  const [verificationSent, setVerificationSent] = useState(false);
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -25,6 +40,12 @@ export default function SettingsForm() {
       setIsAdmin(isUserAdmin());
       setLoaded(true);
     });
+    const unsubscribe = subscribeToAuth((fbUser) => {
+      setIsAdmin(isAuthorizedAdmin(fbUser));
+      setNeedsVerification(isSignedInAdminUnverified(fbUser));
+      setSignedInEmail(fbUser?.email ?? null);
+    });
+    return () => unsubscribe();
   }, []);
 
   function update<K extends keyof AppSettings>(key: K, value: AppSettings[K]) {
@@ -194,71 +215,155 @@ export default function SettingsForm() {
           </div>
         </div>
 
-        {/* Option A: Admin Mode Status */}
+        {/* Firebase Admin Auth Status */}
         <div className="mt-1 flex flex-col gap-2 border-t border-black/5 pt-3 dark:border-white/5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium">Admin Authorization</span>
               {isAdmin ? (
                 <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] font-semibold text-blue-600 dark:text-blue-400">
-                  🔓 Unlocked
+                  🔓 Verified Admin
+                </span>
+              ) : needsVerification ? (
+                <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold text-amber-600 dark:text-amber-400">
+                  ✉️ Verification Required
                 </span>
               ) : (
                 <span className="rounded-full bg-neutral-200 px-2 py-0.5 text-[10px] font-semibold text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
-                  🔒 Locked
+                  🔒 Reader Mode
                 </span>
               )}
             </div>
-            {isAdmin && (
+            {(isAdmin || needsVerification) && (
               <button
                 type="button"
-                onClick={() => {
-                  lockAdmin();
+                onClick={async () => {
+                  await lockAdmin();
                   setIsAdmin(false);
+                  setNeedsVerification(false);
+                  setSignedInEmail(null);
+                  setAdminError(null);
+                  setVerificationSent(false);
                 }}
                 className="text-xs text-red-500 hover:underline"
               >
-                Lock admin
+                Sign out
               </button>
             )}
           </div>
           <p className="text-xs text-neutral-500">
             {isAdmin
-              ? "You can upload and delete cloud books. Readers can only view and read."
-              : "Option A active: Enter the secret admin passcode to publish or delete books."}
+              ? `Signed in as ${signedInEmail || ADMIN_EMAIL}. You can publish and delete cloud books; readers view with zero login.`
+              : needsVerification
+              ? `Signed in as ${signedInEmail || ADMIN_EMAIL}, but email verification is required before Firestore & Storage write rules allow edits.`
+              : `Sign in with your Firebase admin account (${ADMIN_EMAIL}) to publish or delete books. Readers browse with zero login.`}
           </p>
 
-          {!isAdmin && (
-            <div className="mt-1 flex gap-2">
+          {needsVerification && (
+            <div className="mt-1 flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                disabled={adminLoading}
+                onClick={async () => {
+                  setAdminError(null);
+                  setAdminLoading(true);
+                  try {
+                    await sendAdminVerificationEmail();
+                    setVerificationSent(true);
+                  } catch (err) {
+                    setAdminError(err instanceof Error ? err.message : "Failed to send verification email.");
+                  } finally {
+                    setAdminLoading(false);
+                  }
+                }}
+                className="rounded border border-black/15 px-3 py-1.5 text-xs font-medium hover:bg-black/5 disabled:opacity-50 dark:border-white/20 dark:hover:bg-white/10"
+              >
+                Send verification email
+              </button>
+              <button
+                type="button"
+                disabled={adminLoading}
+                onClick={async () => {
+                  setAdminError(null);
+                  setAdminLoading(true);
+                  try {
+                    const verified = await refreshAdminVerification();
+                    setIsAdmin(verified);
+                    setNeedsVerification(!verified);
+                    if (!verified) {
+                      setAdminError("Email is not verified yet. Open the verification link in your inbox, then check again.");
+                    }
+                  } catch (err) {
+                    setAdminError(err instanceof Error ? err.message : "Verification check failed.");
+                  } finally {
+                    setAdminLoading(false);
+                  }
+                }}
+                className="rounded bg-neutral-900 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-neutral-800 disabled:opacity-50 dark:bg-white dark:text-black dark:hover:bg-neutral-200"
+              >
+                {adminLoading ? "Checking…" : "I've verified — check again"}
+              </button>
+              {verificationSent && (
+                <span className="text-[11px] text-emerald-600 dark:text-emerald-400">
+                  Verification email sent.
+                </span>
+              )}
+            </div>
+          )}
+
+          {!isAdmin && !needsVerification && (
+            <div className="mt-1 flex flex-col gap-2 sm:flex-row">
+              <input
+                type="email"
+                value={adminEmail}
+                onChange={(e) => {
+                  setAdminEmail(e.target.value);
+                  setAdminError(null);
+                }}
+                placeholder="Admin email…"
+                autoComplete="email"
+                className="flex-1 rounded border border-black/15 bg-transparent px-3 py-1.5 text-xs dark:border-white/20"
+              />
               <input
                 type="password"
-                value={adminInput}
+                value={adminPassword}
                 onChange={(e) => {
-                  setAdminInput(e.target.value);
-                  setAdminError(false);
+                  setAdminPassword(e.target.value);
+                  setAdminError(null);
                 }}
-                placeholder="Admin passcode…"
+                placeholder="Password…"
+                autoComplete="current-password"
                 className="flex-1 rounded border border-black/15 bg-transparent px-3 py-1.5 text-xs dark:border-white/20"
               />
               <button
                 type="button"
-                onClick={() => {
-                  if (verifyAdminPasscode(adminInput)) {
-                    setIsAdmin(true);
-                    setAdminInput("");
-                    setAdminError(false);
-                  } else {
-                    setAdminError(true);
+                disabled={adminLoading || !adminEmail.trim() || !adminPassword}
+                onClick={async () => {
+                  setAdminError(null);
+                  setVerificationSent(false);
+                  setAdminLoading(true);
+                  try {
+                    const result = await signInAdmin(adminEmail, adminPassword);
+                    setIsAdmin(result.isAdmin);
+                    setNeedsVerification(result.needsVerification);
+                    setSignedInEmail(result.user.email ?? null);
+                    if (result.isAdmin) {
+                      setAdminPassword("");
+                    }
+                  } catch (err) {
+                    setAdminError(err instanceof Error ? err.message : "Invalid admin credentials.");
+                  } finally {
+                    setAdminLoading(false);
                   }
                 }}
-                className="rounded bg-neutral-900 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-200"
+                className="rounded bg-neutral-900 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-neutral-800 disabled:opacity-50 dark:bg-white dark:text-black dark:hover:bg-neutral-200"
               >
-                Unlock
+                {adminLoading ? "Signing in…" : "Sign in"}
               </button>
             </div>
           )}
           {adminError && (
-            <p className="text-[11px] text-red-500">Incorrect passcode. Check NEXT_PUBLIC_ADMIN_PASSCODE.</p>
+            <p className="text-[11px] text-red-500">{adminError}</p>
           )}
         </div>
       </section>

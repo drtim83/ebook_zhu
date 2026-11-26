@@ -425,8 +425,8 @@ export default function UploadWizard() {
           isOpen={showPasscodeModal}
           onClose={() => setShowPasscodeModal(false)}
           onSuccess={executeSave}
-          title="Admin Verification"
-          description="Enter the admin passcode to publish books to the public cloud library."
+          title="Admin Sign-In"
+          description="Sign in with your Firebase admin account to publish books to the public cloud library."
         />
       </div>
     );
