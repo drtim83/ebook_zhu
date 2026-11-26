@@ -1,5 +1,5 @@
 import { getAllPages, listBooks } from "./db";
-import { getAllCloudData, isSupabaseConfigured } from "./supabase";
+import { getAllCloudData, isFirebaseConfigured } from "./cloudLibrary";
 import type { Book, BookPage } from "./types";
 
 export interface PageMatch {
@@ -126,7 +126,7 @@ export async function searchAllBooks(query: string): Promise<BookSearchResult[]>
   const allBooks: Book[] = [...localBooks];
   const allPages: BookPage[] = [...localPages];
 
-  if (isSupabaseConfigured()) {
+  if (isFirebaseConfigured()) {
     try {
       const { books: cloudBooks, pages: cloudPages } = await getAllCloudData();
       const localIds = new Set(localBooks.map((b) => b.id));

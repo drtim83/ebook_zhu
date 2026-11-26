@@ -1,6 +1,5 @@
 /**
  * Cloud backend implementation for Ebook using Firebase (Firestore & Storage).
- * Maintained with compatibility exports for existing UI components.
  */
 
 import {
@@ -26,11 +25,7 @@ import {
 import { db, storage, isFirebaseConfigured } from "./firebase";
 import type { Book, BookPage } from "./types";
 
-export { isFirebaseConfigured, isFirebaseConfigured as isSupabaseConfigured };
-
-export function getSupabase() {
-  return isFirebaseConfigured() ? { firestore: db, storage } : null;
-}
+export { isFirebaseConfigured };
 
 export interface CloudUploadProgress {
   stage: "cover" | "pages" | "database";

@@ -167,7 +167,7 @@ export default function SettingsForm() {
 
       <section className="flex flex-col gap-3 rounded-xl border border-black/10 p-4 dark:border-white/10">
         <div className="flex items-center justify-between">
-          <h2 className="font-medium">☁️ Supabase Cloud &amp; Netlify</h2>
+          <h2 className="font-medium">☁️ Firebase Cloud &amp; Netlify</h2>
           <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
             Connected
           </span>

@@ -43,7 +43,7 @@
 
 ### 7. 💾 Local-First Zero-Knowledge Architecture
 - **IndexedDB Client Storage (`idb`):** Books, high-resolution scanned page images, transcriptions, and personal bookmarks are saved locally inside browser storage.
-- **Cloud Synchronization:** Optional Supabase database synchronization and Google Drive OAuth integration for importing raw scans or archiving preserved collections.
+- **Cloud Synchronization:** Optional Firebase (Cloud Firestore & Firebase Storage) synchronization and Google Drive OAuth integration for importing raw scans or archiving preserved collections.
 
 ### 8. 📤 High-Fidelity Multi-Format Export
 - **Exact Scanned PDF:** Reconstructs the physical manuscript into a downloadable PDF utilizing `pdf-lib`.
@@ -77,7 +77,7 @@ graph TD
         EXP_EPUB["EPUB3 Generator (jszip)"]
         
         DB_LOCAL["IndexedDB (idb Client Storage)"]
-        DB_CLOUD["Supabase / Google Drive Sync"]
+        DB_CLOUD["Firebase Firestore / Google Drive Sync"]
     end
 
     subgraph AndroidApp ["Native Android App (祝氏族谱)"]
@@ -136,7 +136,7 @@ graph TD
 | **PDF Processing** | `pdfjs-dist` ^6.2 + `pdf-lib` ^1.17 | Vector rasterization and programmatic PDF generation |
 | **Document Export** | `docx` ^9.7 + `jszip` ^3.10 | Native DOCX document generation and EPUB3 compression |
 | **Local Database** | `idb` ^8.0.3 (IndexedDB) | High-capacity browser storage for high-res page images |
-| **Cloud & Storage** | `@supabase/supabase-js` ^2.116 | Optional cloud database and authentication integration |
+| **Cloud & Storage** | `firebase` ^13.0 | Cloud Firestore and Firebase Storage integration |
 | **Android Framework** | Android SDK (Java 17/21, Gradle 9) | Native Android wrapper with WebView and TextToSpeech |
 
 ---

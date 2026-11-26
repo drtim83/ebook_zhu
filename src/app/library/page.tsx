@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { listBooks } from "@/lib/db";
-import { listCloudBooks, isSupabaseConfigured } from "@/lib/supabase";
+import { listCloudBooks, isFirebaseConfigured } from "@/lib/cloudLibrary";
 import type { Book } from "@/lib/types";
 import BookCard from "@/components/BookCard";
 import LibrarySearch from "@/components/LibrarySearch";
@@ -11,7 +11,7 @@ import LibrarySearch from "@/components/LibrarySearch";
 export default function LibraryPage() {
   const [books, setBooks] = useState<Book[] | null>(null);
   const [activeFilter, setActiveFilter] = useState<"all" | "cloud" | "local">("all");
-  const [hasCloudConfig] = useState(() => isSupabaseConfigured());
+  const [hasCloudConfig] = useState(() => isFirebaseConfigured());
 
   useEffect(() => {
 
@@ -81,7 +81,7 @@ export default function LibraryPage() {
           <div>
             <p className="font-semibold">☁️ Cloud Library Setup</p>
             <p className="text-xs opacity-80">
-              Supabase project created (<code>Ebook_Zhu</code>). Add your <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> in <code>.env.local</code> to enable public readers without login.
+              Configure <code>NEXT_PUBLIC_FIREBASE_API_KEY</code> and <code>NEXT_PUBLIC_FIREBASE_PROJECT_ID</code> in <code>.env.local</code> to enable Cloud Firestore readers without login.
             </p>
           </div>
           <Link
